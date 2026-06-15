@@ -1,25 +1,20 @@
 import type { MetadataRoute } from 'next'
+import { SITE_URL } from '@/lib/site-url'
 
+/**
+ * Generates /robots.txt via Next.js Metadata Route.
+ * @see https://nextjs.org/docs/app/api-reference/file-conventions/metadata/robots
+ */
 export default function robots(): MetadataRoute.Robots {
-  const baseUrl = 'https://oskvid.com'
-  
   return {
-    rules: {
-      userAgent: '*',
-      allow: [
-        '/',
-        '/portfolio/',
-        '/par-oskvid/',  
-        '/oskvid-kontakti/',  
-        '/atsauksmes/',  
-        '/video-filmesana/',  
-        '/kazu-blogs/',  
-      ],
-      disallow: [
-        '/admin/',
-        '/api/',
-      ],
-    },
-    sitemap: `${baseUrl}/sitemap.xml`,
+    rules: [
+      {
+        userAgent: '*',
+        allow: '/',
+        disallow: ['/admin/', '/admin', '/api/'],
+      },
+    ],
+    sitemap: `${SITE_URL}/sitemap.xml`,
+    host: SITE_URL,
   }
 }

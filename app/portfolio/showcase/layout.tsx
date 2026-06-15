@@ -1,13 +1,8 @@
-import type { Metadata } from "next"
-import type { ReactNode } from "react"
+import type { ReactNode } from 'react'
+import { SeoLayout, createLayoutMetadata } from '@/lib/seo/layout-helpers'
 
-export const metadata: Metadata = {
-  title: "Showcase video | Osk Vid",
-  description:
-    "Showcase un produktu demonstrāciju video, kas izceļ detaļas, struktūru un padara piedāvājumu saprotamu klientiem.",
-}
+export const metadata = createLayoutMetadata('portfolioShowcase')
 
 export default function ShowcaseLayout({ children }: { children: ReactNode }) {
-  return <>{children}</>
+  return <SeoLayout configKey='portfolioShowcase'>{children}</SeoLayout>
 }
-

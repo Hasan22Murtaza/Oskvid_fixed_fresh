@@ -249,10 +249,9 @@ export function DynamicSEO() {
         return true
       })
 
-      // Add new hreflang links with main domain (only our own)
+      // Add hreflang links (Latvian only — no separate /en routes)
       const hreflangs = [
-        { lang: "lv", url: `${baseUrl}${pathname}` },
-        { lang: "en", url: `${baseUrl}/en${pathname}` },
+        { lang: "lv-LV", url: `${baseUrl}${pathname}` },
         { lang: "x-default", url: `${baseUrl}${pathname}` },
       ]
 
@@ -298,82 +297,7 @@ export function DynamicSEO() {
     } catch (error) {
       console.warn("Error updating SEO meta tags:", error)
     }
-  }, [language, pathname, currentSeo, currentUrl])
-
-  useEffect(() => {
-    // Check if document exists (client-side only)
-    if (typeof document === "undefined") return
-
-    try {
-      // Remove only schema script previously created by this component
-      createdElementsRef.current = createdElementsRef.current.filter((el) => {
-        const isOurSchema =
-          el.tagName === "SCRIPT" &&
-          (el as HTMLElement).getAttribute("data-dynamic-seo") === "1" &&
-          (el as HTMLScriptElement).type === "application/ld+json"
-        if (isOurSchema) {
-          safelyRemoveElement(el)
-          return false
-        }
-        return true
-      })
-
-      const schemaScript = safelyCreateAndAppend("script", {
-        type: "application/ld+json",
-      })
-
-      if (schemaScript) {
-        schemaScript.textContent = JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "ProfessionalService",
-          name: "OskVid",
-          description: currentSeo.description,
-          url: baseUrl,
-          logo: `${baseUrl}/logo-gold.png`,
-          image: `${baseUrl}/og-image.png`,
-          address: {
-            "@type": "PostalAddress",
-            streetAddress: "Anniņas",
-            addressLocality: "Tomes pagasts",
-            addressRegion: "Ogres novads",
-            postalCode: "LV-5020",
-            addressCountry: {
-              "@type": "Country",
-              name: "Latvia",
-            },
-          },
-          contactPoint: {
-            "@type": "ContactPoint",
-            telephone: "+371 23304329",
-            contactType: "customer service",
-            email: "info@oskvid.com",
-          },
-          sameAs: ["https://www.facebook.com/Oskvidcinematography/?locale=lv_LV", "https://www.instagram.com/osk_vid/"],
-          serviceType: [
-            "Wedding Videography",
-            "Promotional Videos",
-            "Event Videography",
-            "Commercial Video Production",
-          ],
-          areaServed: {
-            "@type": "Country",
-            name: "Latvia",
-          },
-          mainEntityOfPage: {
-            "@type": "WebPage",
-            "@id": currentUrl,
-          },
-          potentialAction: {
-            "@type": "ContactAction",
-            target: `${baseUrl}/oskvid-kontakti`,
-            name: "Contact us",
-          },
-        })
-      }
-    } catch (error) {
-      console.warn("Error updating schema script:", error)
-    }
-  }, [currentSeo, baseUrl, currentUrl])
+  }, [language, pathname, currentSeo, currentUrl, baseUrl])
 
   // Cleanup function to remove created elements
   useEffect(() => {

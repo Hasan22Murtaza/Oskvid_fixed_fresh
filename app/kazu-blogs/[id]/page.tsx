@@ -8,6 +8,8 @@ import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import { ChevronLeft, Calendar, Clock, Tag, Facebook, Linkedin, Link2, ArrowRight } from 'lucide-react'
 import { absoluteUrl } from '@/lib/site-url'
+import { SeoBreadcrumbs } from '@/components/seo-breadcrumbs'
+import { PAGE_SEO } from '@/lib/seo/pages'
 
 function getYouTubeVideoId(url: string): string | null {
    const match = url.match(
@@ -109,6 +111,15 @@ export default function ArticleDetailPage() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5 }}
                >
+                  {/* Breadcrumbs */}
+                  <SeoBreadcrumbs
+                     items={[
+                        ...PAGE_SEO.blog.breadcrumbs,
+                        { name: article.title, path: `/kazu-blogs/${article.id}` },
+                     ]}
+                     className='mb-6'
+                  />
+
                   {/* Back Button */}
                   <Button
                      variant='ghost'

@@ -1,5 +1,4 @@
 import type React from 'react'
-import type { Metadata } from 'next'
 import Script from 'next/script'
 import { Space_Grotesk } from 'next/font/google'
 import './globals.css'
@@ -15,7 +14,14 @@ import { FloatingContactWidget } from '@/components/floating-contact-widget'
 import { Toaster } from '@/components/ui/toaster'
 import { AutoImageUpdater } from '@/components/auto-image-updater'
 import { CMSContentRefresher } from '@/components/cms-content-refresher'
-import { SITE_URL } from '@/lib/site-url'
+import { getRootMetadata } from '@/lib/seo/metadata'
+import { JsonLd } from '@/components/json-ld'
+import {
+  getOrganizationSchema,
+  getWebPageSchema,
+  getWebSiteSchema,
+} from '@/lib/seo/schema'
+import { PAGE_SEO } from '@/lib/seo/pages'
 
 const spaceGrotesk = Space_Grotesk({
    subsets: ['latin'],
@@ -25,117 +31,7 @@ const spaceGrotesk = Space_Grotesk({
    fallback: ['system-ui', '-apple-system', 'sans-serif'],
 })
 
-export const metadata: Metadata = {
-   metadataBase: new URL(SITE_URL),
-   title: {
-      default:
-         'Osk Vid - Video Filmēšanas Pakalpojumi Kāzām, Pasākumiem un Uzņēmumiem',
-      template: 'Osk Vid | Kāzu Video un pasākumu Video filmēšana',
-   },
-   description:
-      'Mēs piedāvājam plašu video pakalpojumu klāstu, tostarp video filmēšanu, montāžu, producēšanu, uzņēmumiem visā Latvijā.',
-   keywords: [
-      'video producēšana Latvijā',
-      'kāzu videogrāfija',
-      'reklāmas video',
-      'pasākumu videogrāfija',
-      'kinematogrāfiski video',
-      'profesionāls videogrāfs',
-      'video montāžas pakalpojumi',
-      'korporatīvie video',
-      'komerciālā video producēšana',
-   ],
-   authors: [{ name: 'Osk Vid' }],
-   creator: 'Osk Vid',
-   publisher: 'Osk Vid',
-   robots: {
-      index: true,
-      follow: true,
-      googleBot: {
-         index: true,
-         follow: true,
-         'max-video-preview': -1,
-         'max-image-preview': 'large',
-         'max-snippet': -1,
-      },
-   },
-   openGraph: {
-      type: 'website',
-      locale: 'lv_LV',
-      alternateLocale: 'en_US',
-      url: 'https://oskvid.com',
-      siteName: 'Osk Vid',
-      title: 'Osk Vid | Video Filmēšanas Pakalpojumi',
-      description:
-         'Profesionāli video producēšanas pakalpojumi Latvijā. Specializējamies kāzās, reklāmas saturā un pasākumos. Premium kino kvalitāte ar 14+ gadu pieredzi.',
-      images: [
-         {
-            url: '/og-image.png',
-            width: 1200,
-            height: 630,
-            alt: 'Osk Vid - Video Filmēšanas Pakalpojumi Kāzām, Pasākumiem un Uzņēmumiem',
-         },
-      ],
-   },
-   twitter: {
-      card: 'summary_large_image',
-      title: 'Osk Vid - Video Filmēšanas Pakalpojumi Kāzām, Pasākumiem un Uzņēmumiem',
-      description:
-         'Profesionāli video producēšanas pakalpojumi Latvijā. Specializējamies kāzās, reklāmas saturā un pasākumos.',
-      images: ['/og-image.png'],
-   },
-   verification: {
-      google: 'your-google-verification-code',
-   },
-   alternates: {
-      canonical: 'https://oskvid.com',
-      languages: {
-         lv: 'https://oskvid.com',
-         en: 'https://oskvid.com/en',
-      },
-   },
-   appleWebApp: {
-      capable: true,
-      statusBarStyle: 'black-translucent',
-      title: 'Osk Vid',
-      startupImage: [
-         {
-            url: '/apple-splash-2048-2732.png',
-            media: '(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2)',
-         },
-         {
-            url: '/apple-splash-1668-2224.png',
-            media: '(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2)',
-         },
-         {
-            url: '/apple-splash-1536-2048.png',
-            media: '(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2)',
-         },
-         {
-            url: '/apple-splash-1125-2436.png',
-            media: '(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)',
-         },
-         {
-            url: '/apple-splash-1242-2208.png',
-            media: '(device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3)',
-         },
-         {
-            url: '/apple-splash-750-1334.png',
-            media: '(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)',
-         },
-         {
-            url: '/apple-splash-640-1136.png',
-            media: '(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)',
-         },
-      ],
-   },
-   formatDetection: {
-      telephone: true,
-      date: false,
-      email: true,
-      address: true,
-   },
-}
+export const metadata = getRootMetadata()
 
 export default function RootLayout({
    children,
@@ -297,92 +193,16 @@ export default function RootLayout({
             <meta name='MobileOptimized' content='width' />
 
             {/* Structured Data (Schema.org) */}
-            <script
-               type='application/ld+json'
-               dangerouslySetInnerHTML={{
-                  __html: JSON.stringify(
-                     {
-                        '@context': 'https://schema.org',
-                        '@type': 'ProfessionalService',
-                        '@id': 'https://oskvid.com/#organization',
-                        name: 'Osk Vid',
-                        description:
-                           'Profesionāli video producēšanas pakalpojumi Latvijā. Specializējamies kāzās, reklāmas saturā un pasākumos. Premium kino kvalitāte ar 14+ gadu pieredzi un 800+ paveiktiem projektiem.',
-                        url: 'https://oskvid.com',
-                        logo: 'https://oskvid.com/logo-gold.png',
-                        image: 'https://oskvid.com/og-image.png',
-                        address: {
-                           '@type': 'PostalAddress',
-                           streetAddress: 'Anniņas',
-                           addressLocality: 'Tomes pagasts',
-                           addressRegion: 'Ogres novads',
-                           postalCode: 'LV-5020',
-                           addressCountry: {
-                              '@type': 'Country',
-                              name: 'Latvia',
-                           },
-                        },
-                        contactPoint: [
-                           {
-                              '@type': 'ContactPoint',
-                              telephone: '+371 23304329',
-                              contactType: 'customer service',
-                              email: 'info@oskvid.com',
-                           },
-                        ],
-sameAs: [
-                            'https://www.facebook.com/Oskvidcinematography/?locale=lv_LV',
-                            'https://www.instagram.com/osk_vid/',
-                         ],
-                        serviceType: [
-                           'Kāzu videogrāfija',
-                           'Reklāmas video',
-                           'Pasākumu videogrāfija',
-                           'Komerciālā video producēšana',
-                        ],
-                        hasOfferCatalog: {
-                           '@type': 'OfferCatalog',
-                           name: 'Video producēšanas pakalpojumi',
-                           itemListElement: [
-                              {
-                                 '@type': 'Offer',
-                                 itemOffered: {
-                                    '@type': 'Service',
-                                    name: 'Kāzu videogrāfija',
-                                 },
-                              },
-                              {
-                                 '@type': 'Offer',
-                                 itemOffered: {
-                                    '@type': 'Service',
-                                    name: 'Reklāmas video',
-                                 },
-                              },
-                              {
-                                 '@type': 'Offer',
-                                 itemOffered: {
-                                    '@type': 'Service',
-                                    name: 'Pasākumu videogrāfija',
-                                 },
-                              },
-                              {
-                                 '@type': 'Offer',
-                                 itemOffered: {
-                                    '@type': 'Service',
-                                    name: 'Komerciālā video producēšana',
-                                 },
-                              },
-                           ],
-                        },
-                        areaServed: {
-                           '@type': 'Country',
-                           name: 'Latvia',
-                        },
-                     },
-                     null,
-                     0,
-                  ),
-               }}
+            <JsonLd
+               data={[
+                  getOrganizationSchema(),
+                  getWebSiteSchema(),
+                  getWebPageSchema({
+                     path: PAGE_SEO.home.path,
+                     name: PAGE_SEO.home.title,
+                     description: PAGE_SEO.home.description,
+                  }),
+               ]}
             />
 
             {/* Critical CSS inline for above-the-fold content */}

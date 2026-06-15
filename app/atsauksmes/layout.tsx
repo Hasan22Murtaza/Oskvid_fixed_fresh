@@ -1,13 +1,13 @@
-import type { Metadata } from "next"
-import type { ReactNode } from "react"
+import type { ReactNode } from 'react'
+import { SeoLayout, createLayoutMetadata } from '@/lib/seo/layout-helpers'
+import { getReviewsSchema } from '@/lib/seo/schema'
 
-export const metadata: Metadata = {
-  title: "Atsauksmes | Osk Vid",
-  description:
-    "Klientu atsauksmes par sadarbību ar Osk Vid – kvalitāte, radošums un uzticamība katrā video projektā.",
-}
+export const metadata = createLayoutMetadata('reviews')
 
 export default function ReviewsLayout({ children }: { children: ReactNode }) {
-  return <>{children}</>
+  return (
+    <SeoLayout configKey='reviews' extraSchema={getReviewsSchema()}>
+      {children}
+    </SeoLayout>
+  )
 }
-

@@ -1,13 +1,8 @@
-import type { Metadata } from "next"
-import type { ReactNode } from "react"
+import type { ReactNode } from 'react'
+import { SeoLayout, createLayoutMetadata } from '@/lib/seo/layout-helpers'
 
-export const metadata: Metadata = {
-  title: "Kāzu video | Osk Vid",
-  description:
-    "Emocionāli kāzu video ar dokumentālu sajūtu, radošu montāžu un kino kvalitāti katram pārim visā Latvijā.",
-}
+export const metadata = createLayoutMetadata('portfolioWeddings')
 
 export default function WeddingsLayout({ children }: { children: ReactNode }) {
-  return <>{children}</>
+  return <SeoLayout configKey='portfolioWeddings'>{children}</SeoLayout>
 }
-

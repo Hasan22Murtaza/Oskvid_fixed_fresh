@@ -7,7 +7,6 @@ import { Button } from '@/components/ui/button'
 import { Play, CheckCircle, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 import { DynamicContent, DynamicImage } from '../../components/dynamic-content'
-import { DynamicSEO } from '@/components/dynamic-seo'
 
 export default function PakalpojumiPage() {
 
@@ -44,8 +43,6 @@ export default function PakalpojumiPage() {
 
    return (
       <>
-         <DynamicSEO />
-
          {/* Hero Section */}
          <section className='relative h-[55vh] pt-20 overflow-hidden'>
             <div className='absolute inset-0 bg-gradient-to-r from-black/70 to-black/50 z-10' />

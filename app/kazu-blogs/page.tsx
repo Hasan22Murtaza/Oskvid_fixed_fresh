@@ -7,6 +7,8 @@ import { motion } from "framer-motion"
 import { Calendar, Clock, ArrowRight, Facebook, Linkedin, Link2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { absoluteUrl } from "@/lib/site-url"
+import { SeoBreadcrumbs } from "@/components/seo-breadcrumbs"
+import { PAGE_SEO } from "@/lib/seo/pages"
 
 interface NewsArticle {
   id: string
@@ -76,6 +78,7 @@ export default function BlogsPage() {
       {/* Hero Section */}
       <section className="pt-28 pb-12 md:pt-32 md:pb-16">
         <div className="container mx-auto px-4 max-w-6xl">
+          <SeoBreadcrumbs items={PAGE_SEO.blog.breadcrumbs} className="mb-6" />
           <motion.div
             initial={{ opacity: 1, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
