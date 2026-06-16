@@ -1,18 +1,4 @@
-import { getContentData } from '@/lib/db'
-
-export interface NewsArticle {
-  id: string
-  title: string
-  excerpt: string
-  image: string
-  category?: string
-  date?: string
-  readtime?: string
-  createdAt?: string
-  updatedAt?: string
-}
-
-const NEWS_KEY = 'news_articles'
+import { loadNewsDataSync, NewsArticle } from "@/lib/news-storage"
 
 function sortArticles(articles: NewsArticle[]): NewsArticle[] {
   return [...articles].sort((a, b) => {
@@ -23,8 +9,7 @@ function sortArticles(articles: NewsArticle[]): NewsArticle[] {
 }
 
 export function getNewsArticles(): NewsArticle[] {
-  const allContent = getContentData()
-  const articles: NewsArticle[] = allContent[NEWS_KEY] || []
+  const { news_articles: articles } = loadNewsDataSync()
   return sortArticles(articles)
 }
 

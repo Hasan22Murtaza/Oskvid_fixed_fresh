@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { getContentData, saveContentData } from "@/lib/db"
+import { loadNewsData, NewsArticle, saveNewsData } from "@/lib/news-storage"
 import path from "path"
 import fs from "node:fs/promises"
 
@@ -34,20 +34,6 @@ function createSlug(title: string, existingSlugs: string[]): string {
   return uniqueSlug
 }
 
-interface NewsArticle {
-  id: string
-  title: string
-  excerpt: string
-  image: string
-  category?: string
-  date?: string
-  readtime?: string
-  createdAt?: string
-  updatedAt?: string
-}
-
-const NEWS_KEY = "news_articles"
-
 const sortArticles = (articles: NewsArticle[]) =>
   articles.sort((a, b) => {
     const dateA = a.date || a.createdAt || ""
@@ -60,8 +46,7 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url)
     const id = searchParams.get("id")
     
-    const allContent = getContentData()
-    const newsArticles: NewsArticle[] = allContent[NEWS_KEY] || []
+    const { news_articles: newsArticles } = await loadNewsData()
 
     if (id) {
       const article = newsArticles.find((a) => a.id === id)
@@ -87,8 +72,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Title and excerpt are required" }, { status: 400 })
     }
 
-    const allContent = getContentData()
-    const newsArticles: NewsArticle[] = allContent[NEWS_KEY] || []
+    const { news_articles: newsArticles } = await loadNewsData()
 
     const existingSlugs = newsArticles.map(a => a.id).filter(id => !id.startsWith('news_'))  // collect user-provided/custom slugs
     const newId = createSlug(title, existingSlugs)
@@ -122,8 +106,7 @@ export async function POST(request: NextRequest) {
     }
 
     newsArticles.push(newArticle)
-    allContent[NEWS_KEY] = newsArticles
-    saveContentData(allContent)
+    await saveNewsData({ news_articles: newsArticles })
 
     return NextResponse.json({ success: true, article: newArticle })
   } catch (error) {
@@ -141,8 +124,7 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json({ error: "ID, title and excerpt are required" }, { status: 400 })
     }
 
-    const allContent = getContentData()
-    const newsArticles: NewsArticle[] = allContent[NEWS_KEY] || []
+    const { news_articles: newsArticles } = await loadNewsData()
     const index = newsArticles.findIndex((article) => article.id === id)
 
     if (index === -1) {
@@ -178,8 +160,7 @@ export async function PUT(request: NextRequest) {
       updatedAt: new Date().toISOString(),
     }
 
-    allContent[NEWS_KEY] = newsArticles
-    saveContentData(allContent)
+    await saveNewsData({ news_articles: newsArticles })
 
     return NextResponse.json({ success: true, article: newsArticles[index] })
   } catch (error) {
@@ -197,8 +178,7 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ error: "Article ID is required" }, { status: 400 })
     }
 
-    const allContent = getContentData()
-    const newsArticles: NewsArticle[] = allContent[NEWS_KEY] || []
+    const { news_articles: newsArticles } = await loadNewsData()
     const index = newsArticles.findIndex((article) => article.id === id)
 
     if (index === -1) {
@@ -206,8 +186,7 @@ export async function DELETE(request: NextRequest) {
     }
 
     newsArticles.splice(index, 1)
-    allContent[NEWS_KEY] = newsArticles
-    saveContentData(allContent)
+    await saveNewsData({ news_articles: newsArticles })
 
     return NextResponse.json({ success: true })
   } catch (error) {
