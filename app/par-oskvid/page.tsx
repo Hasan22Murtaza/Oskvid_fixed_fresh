@@ -1,10 +1,16 @@
 "use client"
 
 import { motion } from "framer-motion"
-import Image from "next/image"
 import Link from "next/link"
 import { useState, useEffect } from "react"
 import { DynamicImage, DynamicContent } from "@/components/dynamic-content"
+import { ArrowUpRight } from "lucide-react"
+import {
+  AgencyButton,
+  BulletDots,
+  Eyebrow,
+  GradientText,
+} from "@/components/agency/agency-ui"
 
 export default function AboutPage() {
   const [content, setContent] = useState({
@@ -57,119 +63,133 @@ export default function AboutPage() {
     }
   }, [])
 
+  const cards = [
+    {
+      href: "/video-filmesana",
+      key: "aboutPageClickableImage1",
+      fallback: "/images/videographer-tower.jpeg",
+      title: "Pakalpojumi",
+      subtitle: "Apskatīt mūsu darbus",
+    },
+    {
+      href: "/kazu-blogs",
+      key: "aboutPageClickableImage2",
+      fallback: "/images/videographer-studio.jpeg",
+      title: "Blogs",
+      subtitle: "Uzzināt vairāk par komandu",
+    },
+    {
+      href: "/oskvid-kontakti",
+      key: "aboutPageClickableImage3",
+      fallback: "/images/videographer-studio.jpeg",
+      title: "Kontakti",
+      subtitle: "Sazināties ar mums",
+    },
+  ]
+
   return (
-    <div className="pt-32 pb-20">
-      <div className="container mx-auto px-4 md:px-6 lg:px-8 max-w-7xl">
-        {/* Hero Section */}
-        <div className="flex flex-col items-center gap-10 mb-20 max-w-5xl mx-auto">
-          <motion.div
-            initial={{ opacity: 1, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
-            className="space-y-8 text-center w-full"
-          >
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#cc5339] mb-8">
-              <DynamicContent contentKey="aboutPageTitle" fallback={content.aboutPageTitle} />
-            </h1>
-            <div className="prose prose-lg text-gray-700 leading-relaxed mx-auto max-w-3xl">
-              <p style={{ 
-                whiteSpace: 'pre-wrap', 
-                wordBreak: 'break-word',
-                fontFamily: 'inherit'
-              }}  className="text-xl mb-6 text-center">
-                <DynamicContent contentKey="aboutPageBio" fallback={content.aboutPageBio} />
+    <div className="pb-20 pt-24">
+      {/* Agency banner */}
+      <section className="px-3 sm:px-5">
+        <div className="mx-auto max-w-7xl">
+          <div className="grid items-center gap-6 pb-8 lg:grid-cols-2">
+            <motion.div
+              initial={{ opacity: 1, x: -30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.7 }}
+            >
+              <Eyebrow>Par mums</Eyebrow>
+              <h1 className="mt-3 font-display text-4xl font-semibold leading-tight text-gray-900 sm:text-5xl lg:text-6xl">
+                <DynamicContent contentKey="aboutPageTitle" fallback={content.aboutPageTitle} as="span" />
+              </h1>
+              <p className="mt-2 font-display text-2xl">
+                <GradientText>
+                  <DynamicContent
+                    contentKey="aboutPageHeroSubtitle"
+                    fallback={content.aboutPageHeroSubtitle}
+                    as="span"
+                  />
+                </GradientText>
               </p>
-            </div>
-          </motion.div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 1, x: 30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.7, delay: 0.15 }}
+              className="lg:pl-6"
+            >
+              <p
+                style={{ whiteSpace: "pre-wrap", wordBreak: "break-word" }}
+                className="text-lg leading-relaxed text-gray-700"
+              >
+                <DynamicContent contentKey="aboutPageBio" fallback={content.aboutPageBio} as="span" />
+              </p>
+              <div className="mt-6">
+                <AgencyButton href="/oskvid-kontakti">Sazināties</AgencyButton>
+              </div>
+            </motion.div>
+          </div>
 
           <motion.div
-            initial={{ opacity: 1, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 1, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="relative w-full max-w-4xl"
+            className="relative h-[320px] w-full overflow-hidden rounded-[20px] sm:h-[460px] lg:h-[560px]"
           >
-            <div className="relative h-96 lg:h-[550px] w-full rounded-2xl overflow-hidden">
-              <DynamicImage
-                contentKey="aboutPageHeroImage"
-                alt="Video production behind the scenes"
-                fill
-                className="object-cover"
-                objectFit="cover"
-                //fallback="/images/videographer-studio.jpeg"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-            </div>
+            <DynamicImage
+              contentKey="aboutPageHeroImage"
+              alt="Video production behind the scenes"
+              fill
+              className="object-cover"
+              objectFit="cover"
+              fallback="/images/videographer-studio.jpeg"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
           </motion.div>
         </div>
+      </section>
 
-        {/* Clickable Images Section */}
-        <motion.div
-          initial={{ opacity: 1, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.6 }}
-          className="grid md:grid-cols-3 gap-8 mb-20"
-        >
-          <Link href="/video-filmesana" className="group block">
-            <div className="relative h-64 rounded-2xl overflow-hidden">
-              <DynamicImage
-                contentKey="aboutPageClickableImage1"
-                alt="Video production services"
-                fill
-                className="object-cover transition-transform duration-300 group-hover:scale-105"
-                objectFit="cover"
-                fallback="/images/videographer-tower.jpeg"
-              />
-              <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors duration-300" />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="text-center text-white">
-                  <h3 className="text-2xl mb-2 font-bold text-[#cc5339] drop-shadow-lg">Pakalpojumi</h3>
-                  <p className="text-white drop-shadow-md font-medium">Apskatīt mūsu darbus</p>
+      {/* Clickable cards */}
+      <section className="px-3 pt-16 sm:px-5">
+        <div className="mx-auto max-w-7xl">
+          <div className="flex justify-center pb-6">
+            <BulletDots size="lg" />
+          </div>
+          <h2 className="mb-10 text-center font-display text-3xl font-semibold text-gray-900 sm:text-4xl">
+            Iepazīsti <GradientText>Oskvid</GradientText>
+          </h2>
+          <motion.div
+            initial={{ opacity: 1, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="grid gap-6 md:grid-cols-3"
+          >
+            {cards.map((card) => (
+              <Link key={card.href} href={card.href} className="group block">
+                <div className="relative h-72 overflow-hidden rounded-3xl">
+                  <DynamicImage
+                    contentKey={card.key}
+                    alt={card.title}
+                    fill
+                    className="object-cover transition-transform duration-500 group-hover:scale-110"
+                    objectFit="cover"
+                    fallback={card.fallback}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/80" />
+                  <div className="absolute right-4 top-4 flex h-11 w-11 items-center justify-center rounded-full bg-white/90 text-[#cc5339] transition-transform duration-300 group-hover:-rotate-12">
+                    <ArrowUpRight className="h-5 w-5" />
+                  </div>
+                  <div className="absolute inset-x-5 bottom-5 text-white">
+                    <h3 className="font-display text-2xl font-semibold">{card.title}</h3>
+                    <p className="text-white/85">{card.subtitle}</p>
+                  </div>
                 </div>
-              </div>
-            </div>
-          </Link>
-
-          <Link href="/kazu-blogs" className="group block">
-            <div className="relative h-64 rounded-2xl overflow-hidden">
-              <DynamicImage
-                contentKey="aboutPageClickableImage2"
-                alt="About our team"
-                fill
-                className="object-cover transition-transform duration-300 group-hover:scale-105"
-                objectFit="cover"
-                fallback="/images/videographer-studio.jpeg"
-              />
-              <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors duration-300" />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="text-center text-white">
-                  <h3 className="text-2xl font-bold mb-2 text-[#cc5339] drop-shadow-lg">Blogs</h3>
-                  <p className="text-white drop-shadow-md font-medium">Uzzināt vairāk par komandu</p>
-                </div>
-              </div>
-            </div>
-          </Link>
-
-          <Link href="/oskvid-kontakti" className="group block">
-            <div className="relative h-64 rounded-2xl overflow-hidden">
-              <DynamicImage
-                contentKey="aboutPageClickableImage3"
-                alt="Contact us"
-                fill
-                className="object-cover transition-transform duration-300 group-hover:scale-105"
-                objectFit="cover"
-                fallback="/images/videographer-studio.jpeg"
-              />
-              <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors duration-300" />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="text-center text-white">
-                  <h3 className="text-2xl font-bold mb-2 text-[#cc5339] drop-shadow-lg">Kontakti</h3>
-                  <p className="text-white drop-shadow-md font-medium">Sazināties ar mums</p>
-                </div>
-              </div>
-            </div>
-          </Link>
-        </motion.div>
-      </div>
+              </Link>
+            ))}
+          </motion.div>
+        </div>
+      </section>
     </div>
   )
 }

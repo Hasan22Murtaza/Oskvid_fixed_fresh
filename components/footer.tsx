@@ -1,17 +1,26 @@
 "use client"
 
-import { useEffect, useState, useRef } from "react"
-import { Button } from "@/components/ui/button"
-import { ChevronLeft, ChevronRight, Pause, Play, Facebook, Youtube, Linkedin, Instagram, Mail, Phone } from "lucide-react"
+import { usePathname } from "next/navigation"
+import { Facebook, Youtube, Linkedin, Instagram, Mail, Phone } from "lucide-react"
 import { useLanguage } from "@/contexts/language-context"
 import { DynamicImage } from "@/components/dynamic-content"
+import { AgencyButton, BulletDots, Eyebrow } from "@/components/agency/agency-ui"
+
+const PARTNER_LOGO_FILES: Record<number, string> = {
+  1: "rsu-logo-color.svg",
+  2: "zanel-logo-color.svg",
+  3: "skudras-metropole-logo-color.svg",
+  4: "tv3-group-logo-color.svg",
+  5: "marupes-novads-logo-color.svg",
+  6: "hanseatic-logo-color.svg",
+  7: "dole-kravas-auto-logo-color.svg",
+  8: "compensa-logo-color.svg",
+}
 
 export default function Footer() {
   const { t } = useLanguage()
-  const [activeIndex, setActiveIndex] = useState(0)
-  const [isPaused, setIsPaused] = useState(false)
-  const [visibleCount, setVisibleCount] = useState(4)
-  const timerRef = useRef<NodeJS.Timeout | null>(null)
+  const pathname = usePathname()
+  const isHome = pathname === "/"
 
   // Static partner structure - content will be loaded via DynamicContent
   const partners = [
@@ -25,146 +34,84 @@ export default function Footer() {
     { id: 8, nameKey: "partner8Name", logoKey: "partner8Logo" },
   ]
 
-  // Determine how many logos to show based on screen size
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth < 640) {
-        setVisibleCount(1)
-      } else if (window.innerWidth < 768) {
-        setVisibleCount(2)
-      } else if (window.innerWidth < 1024) {
-        setVisibleCount(3)
-      } else {
-        setVisibleCount(4)
-      }
-    }
-
-    handleResize()
-    // Only add event listener if window exists
-    if (typeof window !== "undefined") {
-      window.addEventListener("resize", handleResize)
-    }
-
-    return () => {
-      if (typeof window !== "undefined") {
-        try {
-          window.removeEventListener("resize", handleResize)
-        } catch (error) {
-          console.warn("Error removing resize listener:", error)
-        }
-      }
-    }
-  }, [])
-
-  // Auto-rotate carousel
-  useEffect(() => {
-    if (isPaused) return
-
-    timerRef.current = setTimeout(() => {
-      setActiveIndex((prevIndex) => (prevIndex + 1) % (partners.length - visibleCount + 1))
-    }, 3000)
-
-    return () => {
-      if (timerRef.current) {
-        clearTimeout(timerRef.current)
-      }
-    }
-  }, [activeIndex, isPaused, visibleCount, partners.length])
-
-  const handlePrevious = () => {
-    setActiveIndex((prevIndex) => Math.max(0, prevIndex - 1))
-  }
-
-  const handleNext = () => {
-    setActiveIndex((prevIndex) => Math.min(partners.length - visibleCount, prevIndex + 1))
-  }
-
-  const togglePause = () => {
-    setIsPaused(!isPaused)
-  }
+  const partnerLogos = partners.map((partner) => (
+    <span
+      key={partner.id}
+      className="relative inline-flex h-10 w-32 items-center justify-center opacity-70 grayscale transition-all duration-300 hover:opacity-100 hover:grayscale-0 sm:h-12 sm:w-40"
+    >
+      <DynamicImage
+        contentKey={partner.logoKey}
+        fallback={`/partners/${PARTNER_LOGO_FILES[partner.id]}`}
+        alt={`Partner ${partner.id}`}
+        fill
+        className="object-contain"
+        objectFit="contain"
+      />
+    </span>
+  ))
 
   return (
     <footer className="relative bg-gray-50">
-      {/* Partners Carousel */}
-      <div className="border-b border-gray-200 py-10">
+      {/* Call-to-action band (home page only) */}
+      {isHome && (
+        <div className="px-3 pb-12 sm:px-5">
+          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#cc5339] to-[#a23d28] px-6 py-12 text-center sm:px-12 sm:py-16">
+            <div className="flex justify-center pb-4">
+              <BulletDots white size="lg" />
+            </div>
+            <h2 className="font-display text-3xl font-semibold text-white sm:text-4xl lg:text-5xl">
+              Veidosim lieliskas lietas kopā
+            </h2>
+            <p className="mx-auto mt-3 max-w-xl text-white/85">
+              Sazinies ar mums jau šodien, lai pārrunātu tava projekta iespējas.
+              Tava ideja ir tikai viena ziņa attālumā.
+            </p>
+            <div className="mt-6 flex justify-center">
+              <AgencyButton href="/oskvid-kontakti" variant="outline-white">
+                Sazināties
+              </AgencyButton>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Partners / Clients */}
+      <div className="border-b border-gray-200 py-12">
         <div className="container-mobile-padding mx-auto max-w-8xl">
-          <div className="relative mx-auto max-w-7xl xl:max-w-8xl">
-            <div className="overflow-hidden">
+          <div className="mb-8 flex flex-col items-center text-center">
+            <Eyebrow center>Sadarbības partneri</Eyebrow>
+            <h3 className="mt-3 font-display text-2xl font-semibold text-gray-900 sm:text-3xl">
+              Mums uzticas
+            </h3>
+          </div>
+
+          <div className="relative overflow-hidden">
+            {/* edge fades */}
+            <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 bg-gradient-to-r from-gray-50 to-transparent sm:w-24" />
+            <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-gradient-to-l from-gray-50 to-transparent sm:w-24" />
+
+            <div className="agency-marquee">
               <div
-                className="flex transition-transform duration-500 ease-in-out"
-                style={{ transform: `translateX(-${activeIndex * (100 / visibleCount)}%)` }}
+                className="agency-marquee__track"
+                style={{ ["--marquee-duration" as string]: "35s" }}
               >
-                {partners.map((partner) => (
-                  <div
-                    key={partner.id}
-                    className="w-full flex-shrink-0 px-2 sm:px-3 md:px-4 lg:px-6"
-                    style={{ width: `${100 / visibleCount}%` }}
-                  >
-                    <div className="flex h-16 sm:h-18 lg:h-20 xl:h-22 items-center justify-center">
-                      <div className="relative h-8 sm:h-10 lg:h-12 xl:h-14 w-full">
-                        <DynamicImage
-                          contentKey={partner.logoKey}
-                          fallback={`/partners/${
-                            partner.id === 1
-                              ? "rsu-logo-color.svg"
-                              : partner.id === 2
-                                ? "zanel-logo-color.svg"
-                                : partner.id === 3
-                                  ? "skudras-metropole-logo-color.svg"
-                                  : partner.id === 4
-                                    ? "tv3-group-logo-color.svg"
-                                    : partner.id === 5
-                                      ? "marupes-novads-logo-color.svg"
-                                      : partner.id === 6
-                                        ? "hanseatic-logo-color.svg"
-                                        : partner.id === 7
-                                          ? "dole-kravas-auto-logo-color.svg"
-                                          : "compensa-logo-color.svg"
-                          }`}
-                          alt={`Partner ${partner.id}`}
-                          fill
-                          className="object-contain"
-                          objectFit="contain"
-                        />
-                      </div>
-                    </div>
-                  </div>
+                {partnerLogos.map((logo, i) => (
+                  <span key={`a-${i}`} className="mx-8 flex flex-shrink-0 items-center sm:mx-10">
+                    {logo}
+                  </span>
                 ))}
               </div>
-            </div>
-
-            <div className="mt-6 flex items-center justify-center space-x-2">
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={handlePrevious}
-                disabled={activeIndex === 0}
-                className="h-10 w-10 sm:h-12 sm:w-12 bg-white border-orange-400 text-orange-600 hover:bg-orange-50 hover:border-orange-500 touch-target"
+              <div
+                className="agency-marquee__track"
+                aria-hidden="true"
+                style={{ ["--marquee-duration" as string]: "35s" }}
               >
-                <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6" />
-                <span className="sr-only">Previous</span>
-              </Button>
-
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={togglePause}
-                className="h-10 w-10 sm:h-12 sm:w-12 bg-white border-orange-400 text-orange-600 hover:bg-orange-50 hover:border-orange-500 touch-target"
-              >
-                {isPaused ? <Play className="h-5 w-5 sm:h-6 sm:w-6" /> : <Pause className="h-5 w-5 sm:h-6 sm:w-6" />}
-                <span className="sr-only">{isPaused ? "Play" : "Pause"}</span>
-              </Button>
-
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={handleNext}
-                disabled={activeIndex >= partners.length - visibleCount}
-                className="h-10 w-10 sm:h-12 sm:w-12 bg-white border-orange-400 text-orange-600 hover:bg-orange-50 hover:border-orange-500 touch-target"
-              >
-                <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6" />
-                <span className="sr-only">Next</span>
-              </Button>
+                {partnerLogos.map((logo, i) => (
+                  <span key={`b-${i}`} className="mx-8 flex flex-shrink-0 items-center sm:mx-10">
+                    {logo}
+                  </span>
+                ))}
+              </div>
             </div>
           </div>
         </div>
@@ -175,7 +122,7 @@ export default function Footer() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Contact Info */}
             <div className="space-y-4">
-              <h3 className="text-lg font-semibold text-gray-800">Kontakti</h3>
+              <h3 className="font-display text-xl font-semibold text-gray-900">Kontakti</h3>
               <div className="space-y-2">
                 <a href="mailto:info@oskvid.com" className="flex items-center gap-2 text-gray-600 hover:text-[#cc5339] transition-colors">
                   <Mail className="w-4 h-4" />
@@ -190,7 +137,7 @@ export default function Footer() {
 
             {/* Social Links */}
             <div className="space-y-4">
-              <h3 className="text-lg font-semibold text-gray-800">Sociālie tīkli</h3>
+              <h3 className="font-display text-xl font-semibold text-gray-900">Sociālie tīkli</h3>
               <div className="flex gap-4">
                 <a href="https://www.facebook.com/Oskvidcinematography/?locale=lv_LV" target="_blank" rel="noopener noreferrer" className="p-2 rounded-full bg-gray-100 text-gray-600 hover:bg-[#cc5339] hover:text-white transition-all duration-300">
                   <Facebook className="w-5 h-5" />
@@ -209,7 +156,7 @@ export default function Footer() {
 
             {/* Brand/Logo */}
             <div className="space-y-4">
-              <h3 className="text-lg font-semibold text-gray-800">Osk Vid</h3>
+              <h3 className="font-display text-xl font-semibold text-gray-900">Osk Vid</h3>
               <p className="text-gray-600 text-sm">
                 Profesionāla kāzu un korporatīvo video filmēšana
               </p>

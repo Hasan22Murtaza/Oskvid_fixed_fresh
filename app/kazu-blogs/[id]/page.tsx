@@ -159,7 +159,7 @@ export default function ArticleDetailPage() {
                   </div>
 
                   {/* Title */}
-                  <h1 className='text-3xl md:text-4xl lg:text-5xl font-bold mb-8 text-[#2d4a3e] leading-tight'>
+                  <h1 className='font-display text-3xl md:text-4xl lg:text-5xl font-semibold mb-8 text-gray-900 leading-tight'>
                      {article.title}
                   </h1>
                </motion.div>

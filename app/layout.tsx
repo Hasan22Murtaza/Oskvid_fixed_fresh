@@ -1,6 +1,6 @@
 import type React from 'react'
 import Script from 'next/script'
-import { Space_Grotesk } from 'next/font/google'
+import { Space_Grotesk, Kameron } from 'next/font/google'
 import './globals.css'
 import Header from '@/components/header'
 import Footer from '@/components/footer'
@@ -29,6 +29,14 @@ const spaceGrotesk = Space_Grotesk({
    display: 'swap',
    preload: true,
    fallback: ['system-ui', '-apple-system', 'sans-serif'],
+})
+
+const kameron = Kameron({
+   subsets: ['latin'],
+   weight: ['400', '500', '600', '700'],
+   variable: '--font-kameron',
+   display: 'swap',
+   fallback: ['Georgia', 'serif'],
 })
 
 export const metadata = getRootMetadata()
@@ -273,7 +281,7 @@ export default function RootLayout({
                }}
             />
          </head>
-         <body className={`${spaceGrotesk.variable} font-sans`}>
+         <body className={`${spaceGrotesk.variable} ${kameron.variable} font-sans`}>
             {/*<PerformanceMonitor />*/}
             {/*<AutoImageUpdater />*/}
             <CMSContentRefresher />

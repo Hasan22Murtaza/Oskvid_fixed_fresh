@@ -8,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Send, Calendar, CheckCircle, XCircle } from "lucide-react";
 import { useState } from "react";
 import { DynamicContent } from "@/components/dynamic-content";
+import { Eyebrow, GradientText } from "@/components/agency/agency-ui";
 
 type Grecaptcha = {
   ready(callback: () => void): void;
@@ -160,24 +161,25 @@ export default function ContactPage() {
           strategy="afterInteractive"
         />
       )}
-      <div className="pt-32 pb-20">
+      <div className="pt-28 pb-20">
         <div className="container mx-auto px-4 md:px-6 lg:px-8 max-w-7xl">
-          <div className="mb-12 space-y-4 text-center">
-            <h1 className="text-3xl font-bold tracking-tight sm:text-4xl text-[#cc5339]">
+          <div className="mb-12 flex flex-col items-center space-y-3 text-center">
+            <Eyebrow center>Kontakti</Eyebrow>
+            <h1 className="font-display text-4xl font-semibold tracking-tight sm:text-5xl text-gray-900">
               <DynamicContent
                 contentKey="contactPageTitle"
                 fallback="Sazināties"
                 as="span"
               />
             </h1>
-            <p className="mx-auto max-w-2xl text-gray-500">
-              Sazinies ar mums par savu projektu
+            <p className="mx-auto max-w-2xl text-lg text-gray-600">
+              Sazinies ar mums par savu projektu — <GradientText>tava ideja</GradientText> ir tikai viena ziņa attālumā.
             </p>
           </div>
 
           <div className="mx-auto max-w-2xl">
-            <div className="rounded-xl border border-gray-200 bg-white p-8 shadow-md">
-              <h2 className="mb-6 text-xl font-semibold text-[#cc5339]">
+            <div className="rounded-3xl border border-gray-200 bg-white p-8 shadow-[rgba(100,100,111,0.2)_0px_7px_29px_0px]">
+              <h2 className="mb-6 font-display text-2xl font-semibold text-gray-900">
                 <DynamicContent
                   contentKey="contactPageFormTitle"
                   fallback="Sazināties ar Oskvid"
@@ -295,7 +297,7 @@ export default function ContactPage() {
                 <Button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full py-6 bg-[#cc5339] hover:bg-[#b8472f] text-white font-semibold transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-[#cc5339]/50 hover:scale-105"
+                  className="w-full rounded-full py-6 bg-gradient-to-br from-[#cc5339] to-[#a23d28] hover:from-[#b8472f] hover:to-[#8f3522] text-white font-semibold transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-[#cc5339]/40"
                 >
                   <span className="flex items-center justify-center gap-2">
                     {isSubmitting ? (

@@ -7,6 +7,13 @@ import { Button } from '@/components/ui/button'
 import { Play, CheckCircle, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 import { DynamicContent, DynamicImage } from '../../components/dynamic-content'
+import {
+   AgencyButton,
+   BulletDots,
+   Eyebrow,
+   GradientText,
+   Marquee,
+} from '@/components/agency/agency-ui'
 
 export default function PakalpojumiPage() {
 
@@ -43,45 +50,80 @@ export default function PakalpojumiPage() {
 
    return (
       <>
-         {/* Hero Section */}
-         <section className='relative h-[55vh] pt-20 overflow-hidden'>
-            <div className='absolute inset-0 bg-gradient-to-r from-black/70 to-black/50 z-10' />
-            <div className='absolute inset-0'>
-               <DynamicImage
-                  contentKey='servicesHeroBackgroundImage'
-                  fallback='/hero-cinematic.jpg'
-                  alt='Video pakalpojumi'
-                  fill
-                  priority
-                  className='object-cover'
-                  objectFit='cover'
-               />
-            </div>
-
-            <div className='container mx-auto px-4 relative z-20 h-full flex flex-col items-center justify-center'>
-                <div className='max-w-4xl mx-auto text-center text-white'>
-                  <motion.div
-                     initial={{ opacity: 1, y: 30 }}
-                     animate={{ opacity: 1, y: 0 }}
-                     transition={{ duration: 0.8 }}
-                  >
-                    <h1 className='text-4xl md:text-6xl font-bold mb-6 leading-tight'>
-                       <DynamicContent contentKey='servicesHeroTitle' fallback='Profesionāli' />
-                       {' '}
-                       <span style={{ color: '#cc5339' }}>
-                          <DynamicContent contentKey='servicesHeroTitleHighlight' fallback='video risinājumi tavai' />
-                       </span>
-                       {' '}
-                       <DynamicContent contentKey='servicesHeroSubtitle' fallback='izaugsmei un atmiņām.' />
-                    </h1>
-                     <p className='text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto'>
+         {/* Hero Section (agency banner) */}
+         <section className='px-3 pt-24 sm:px-5'>
+            <div className='mx-auto max-w-7xl'>
+               <div className='grid items-center gap-6 pb-8 lg:grid-cols-2'>
+                  <div>
+                     <Eyebrow>Pakalpojumi</Eyebrow>
+                     <h1 className='mt-3 font-display text-4xl font-semibold leading-tight text-gray-900 sm:text-5xl'>
+                        <DynamicContent contentKey='servicesHeroTitle' fallback='Profesionāli' as='span' />{' '}
+                        <GradientText>
+                           <DynamicContent contentKey='servicesHeroTitleHighlight' fallback='video risinājumi tavai' as='span' />
+                        </GradientText>{' '}
+                        <DynamicContent contentKey='servicesHeroSubtitle' fallback='izaugsmei un atmiņām.' as='span' />
+                     </h1>
+                  </div>
+                  <div className='lg:pl-6'>
+                     <p className='text-lg text-gray-700'>
                         <DynamicContent
                            contentKey='servicesHeroDescription'
                            fallback='No personīgiem stāstiem līdz jaudīgam saturam uzņēmumiem.'
+                           as='span'
                         />
                      </p>
-                  </motion.div>
+                     <div className='mt-5'>
+                        <AgencyButton href='/oskvid-kontakti'>Sāc projektu</AgencyButton>
+                     </div>
+                  </div>
                </div>
+
+               <div className='relative'>
+                  <div className='h-[300px] overflow-hidden rounded-[20px] sm:h-[420px] lg:h-[520px]'>
+                     <DynamicImage
+                        contentKey='servicesHeroBackgroundImage'
+                        fallback='/hero-cinematic.jpg'
+                        alt='Video pakalpojumi'
+                        fill
+                        priority
+                        className='object-cover'
+                        objectFit='cover'
+                     />
+                  </div>
+                  <div className='rounded-tl-[20px] bg-[#f4f4f4] p-5 sm:absolute sm:bottom-0 sm:right-0 sm:max-w-sm sm:rounded-br-[20px]'>
+                     <div className='flex items-start gap-3'>
+                        <p className='text-gray-700'>
+                           Strādājam visā Latvijā — no idejas līdz gatavam video, kas atstāj iespaidu.
+                        </p>
+                        <Link
+                           href='/oskvid-kontakti'
+                           aria-label='Sazināties'
+                           className='flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-[#cc5339] text-2xl text-white transition-colors hover:bg-black'
+                        >
+                           →
+                        </Link>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </section>
+
+         {/* Marquee keyword strip */}
+         <section className='py-10'>
+            <div className='bg-gradient-to-r from-[#cc5339] to-[#a23d28] py-2 text-white'>
+               <Marquee
+                  items={[
+                     'Kāzu video',
+                     'Reklāmas video',
+                     'Pasākumi',
+                     'Drona uzņēmumi',
+                     'Montāža',
+                     'Tiešraides',
+                     '4K kvalitāte',
+                  ].map((w) => (
+                     <span key={w}>{w}</span>
+                  ))}
+               />
             </div>
          </section>
 
@@ -95,10 +137,14 @@ export default function PakalpojumiPage() {
                   transition={{ duration: 0.6 }}
                   className='text-center mb-16'
                >
-                  <h2 className='text-4xl md:text-5xl font-bold mb-6'>
+                  <div className='flex justify-center pb-4'>
+                     <BulletDots size='xl' />
+                  </div>
+                  <h2 className='mb-6 font-display text-4xl font-semibold md:text-5xl'>
                      <DynamicContent
                         contentKey='servicesSectionTitle'
                         fallback='Mūsu pakalpojumi'
+                        as='span'
                      />
                   </h2>
                   <p className='text-xl text-gray-600 max-w-3xl mx-auto'>

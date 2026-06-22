@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button"
 import { absoluteUrl } from "@/lib/site-url"
 import { SeoBreadcrumbs } from "@/components/seo-breadcrumbs"
 import { PAGE_SEO } from "@/lib/seo/pages"
+import { Eyebrow, GradientText } from "@/components/agency/agency-ui"
 
 interface NewsArticle {
   id: string
@@ -83,10 +84,11 @@ export default function BlogsPage() {
             initial={{ opacity: 1, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="text-center mb-12"
+            className="flex flex-col items-center text-center mb-12"
           >
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 text-[#2d4a3e]">
-              Blogs
+            <Eyebrow center>Raksti</Eyebrow>
+            <h1 className="mt-3 font-display text-4xl md:text-5xl lg:text-6xl font-semibold mb-4 text-gray-900">
+              <GradientText>Blogs</GradientText>
             </h1>
             <p className="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto">
               Jaunākie raksti par kāzu video, padomi un ieteikumi
@@ -111,7 +113,7 @@ export default function BlogsPage() {
                 >
                   <Link href={`/kazu-blogs/${article.id}`} className="block">
                     {/* Featured Image */}
-                    <div className="relative aspect-[16/10] mb-6 overflow-hidden rounded-lg bg-gray-100">
+                    <div className="relative aspect-[16/10] mb-6 overflow-hidden rounded-3xl bg-gray-100">
                       <Image
                         src={article.image || "/images/professional-camera.jpg"}
                         alt={article.title}
@@ -144,7 +146,7 @@ export default function BlogsPage() {
                     </div>
 
                     {/* Title */}
-                    <h2 className="text-2xl md:text-3xl font-bold mb-3 text-[#2d4a3e] group-hover:text-[#cc5339] transition-colors duration-300 leading-tight">
+                    <h2 className="font-display text-2xl md:text-3xl font-semibold mb-3 text-gray-900 group-hover:text-[#cc5339] transition-colors duration-300 leading-tight">
                       {article.title}
                     </h2>
 

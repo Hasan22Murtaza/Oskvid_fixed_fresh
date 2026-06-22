@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import { ChevronDown, MessageCircle, Quote, Star } from "lucide-react";
 import { useLanguage } from "../../contexts/language-context";
 import { DynamicContent, DynamicImage } from "../../components/dynamic-content";
+import { BulletDots, Eyebrow, GradientText, Marquee } from "../../components/agency/agency-ui";
 
 interface Testimonial {
   id: number;
@@ -216,12 +217,21 @@ export default function ReviewsPage() {
         </motion.div>
 
         <div className="relative z-10 h-full flex flex-col items-center justify-center text-center px-4">
+          <motion.div
+            initial={{ opacity: 1, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7 }}
+            className="mb-4 flex justify-center"
+          >
+            <Eyebrow white center>
+              <span className="text-white">Klientu vārdi</span>
+            </Eyebrow>
+          </motion.div>
           <motion.h1
             initial={{ opacity: 1, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="text-5xl md:text-7xl lg:text-8xl font-bold text-white mb-4 tracking-wider"
-            style={{ fontFamily: "serif" }}
+            className="font-display text-5xl md:text-7xl lg:text-8xl font-semibold text-white mb-4 tracking-wide"
           >
             <DynamicContent
               as="span"
@@ -256,9 +266,34 @@ export default function ReviewsPage() {
         </div>
       </section>
 
+      {/* Marquee keyword strip */}
+      <div className="bg-gradient-to-r from-[#cc5339] to-[#a23d28] py-2 text-white">
+        <Marquee
+          items={[
+            "5 zvaigžņu atsauksmes",
+            "Apmierināti klienti",
+            "Kāzas",
+            "Pasākumi",
+            "Reklāma",
+            "Uzticams partneris",
+          ].map((w) => (
+            <span key={w}>{w}</span>
+          ))}
+        />
+      </div>
+
       {/* Testimonials Section */}
       <section id="testimonials-section" className="py-16 md:py-24 bg-white">
         <div className="container mx-auto px-4 max-w-6xl">
+          <div className="mb-12 flex flex-col items-center text-center">
+            <Eyebrow center>Atsauksmes</Eyebrow>
+            <h2 className="mt-3 font-display text-3xl md:text-4xl lg:text-5xl font-semibold text-gray-900">
+              Ko saka mūsu <GradientText>klienti</GradientText>
+            </h2>
+            <p className="mt-3 max-w-2xl text-lg text-gray-600">
+              Patiesi vārdi no pāriem un uzņēmumiem, ar kuriem esam strādājuši.
+            </p>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {testimonials.map((testimonial, index) => (
               <motion.article
@@ -267,15 +302,15 @@ export default function ReviewsPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-50px" }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
-                className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 p-8 relative overflow-hidden"
+                className="bg-white rounded-3xl shadow-md hover:shadow-[rgba(100,100,111,0.2)_0px_7px_29px_0px] hover:-translate-y-1 transition-all duration-300 p-8 relative overflow-hidden"
               >
-                <div className="absolute top-2 left-4 text-6xl text-gray-200 font-serif leading-none select-none">
+                <div className="absolute top-2 left-4 text-6xl text-[#cc5339]/15 font-serif leading-none select-none">
                   <Quote />
                 </div>
 
                 <div className="relative z-10">
                   <div className="flex items-start gap-4 mb-4">
-                    <div className="relative w-14 h-14 rounded-full overflow-hidden flex-shrink-0 bg-[#4a7c9b] flex items-center justify-center">
+                    <div className="relative w-14 h-14 rounded-full overflow-hidden flex-shrink-0 bg-gradient-to-br from-[#cc5339] to-[#a23d28] flex items-center justify-center">
                       {testimonial.image ? (
                         <Image
                           src={testimonial.image}
@@ -291,7 +326,7 @@ export default function ReviewsPage() {
                     </div>
 
                     <div className="flex-1 pt-0.5">
-                      <h3 className="text-base font-semibold text-gray-800">
+                      <h3 className="font-display text-lg font-semibold text-gray-900">
                         {testimonial.name}
                         {testimonial.role && (
                           <span className="text-gray-500 font-normal">
@@ -326,7 +361,7 @@ export default function ReviewsPage() {
                   )}
                 </div>
 
-                <div className="absolute bottom-2 right-4 text-6xl text-gray-200 font-serif leading-none select-none">
+                <div className="absolute bottom-2 right-4 text-6xl text-[#cc5339]/15 font-serif leading-none select-none">
                   <Quote />
                 </div>
               </motion.article>
@@ -338,13 +373,19 @@ export default function ReviewsPage() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
-            className="mt-20 text-center"
+            className="mt-20 flex flex-col items-center text-center"
           >
+            <div className="pb-4">
+              <BulletDots size="lg" />
+            </div>
+            <h3 className="mb-6 font-display text-2xl md:text-3xl font-semibold text-gray-900">
+              Vai biji apmierināts ar mūsu darbu?
+            </h3>
             <a
               href={ctaUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-3 px-8 py-4 bg-[#2d4a3e] hover:bg-[#3d5a4e] text-white font-medium rounded-lg transition-all duration-300 hover:shadow-lg"
+              className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-br from-[#cc5339] to-[#a23d28] hover:from-[#b8472f] hover:to-[#8f3522] text-white font-semibold rounded-full transition-all duration-300 hover:shadow-lg"
             >
               <MessageCircle className="w-5 h-5" />
               <span>

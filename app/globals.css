@@ -358,6 +358,195 @@
   }
 }
 
+/* ==========================================================================
+   Agency design system (NorthBound-style re-skin, mapped to Oskvid brand)
+   Brand orange #cc5339 replaces the original blue gradient.
+   ========================================================================== */
+:root {
+  --agency-primary: #cc5339;
+  --agency-primary-deep: #a23d28;
+  --agency-light: #f4f4f4;
+  --agency-dark: #2e4d71;
+  --agency-gradient: linear-gradient(to right, #e07a5f 0%, #cc5339 100%);
+  --agency-gradient-br: linear-gradient(to bottom right, #cc5339 60%, #a23d28 100%);
+}
+
+@layer components {
+  /* Editorial display headings */
+  .font-display {
+    font-family: var(--font-kameron), Georgia, serif;
+  }
+
+  /* Gradient text accent */
+  .agency-gradient-text {
+    background: var(--agency-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+
+  /* Two-dot bullet marker */
+  .agency-bullets {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .agency-bullets > span {
+    display: block;
+    width: 18px;
+    height: 18px;
+    border-radius: 9999px;
+    border: 1px solid var(--agency-primary-deep);
+  }
+  .agency-bullets > span.is-filled {
+    background: var(--agency-gradient);
+    border-color: transparent;
+  }
+  .agency-bullets.is-white > span {
+    border-color: rgba(255, 255, 255, 0.85);
+  }
+  .agency-bullets.is-white > span.is-filled {
+    background: #fff;
+    border-color: #fff;
+  }
+  .agency-bullets.is-lg > span {
+    width: 24px;
+    height: 24px;
+  }
+  .agency-bullets.is-28 > span {
+    width: 28px;
+    height: 28px;
+  }
+
+  /* Pill button with expanding circle + arrow (matches design .custom_primary) */
+  .agency-btn {
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    gap: 1.75rem;
+    padding: 0.75rem 0.75rem 0.75rem 2.5rem;
+    border-radius: 9999px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    line-height: 1;
+    color: #fff;
+    background: var(--agency-gradient-br);
+    isolation: isolate;
+    transition: color 0.3s ease;
+    white-space: nowrap;
+  }
+  .agency-btn__circle {
+    position: absolute;
+    z-index: -1;
+    right: 2px;
+    top: 2px;
+    bottom: 2px;
+    width: 44px;
+    border-radius: 9999px;
+    background: #fff;
+    transition: width 0.35s cubic-bezier(0.1, 0.7, 0, 1);
+  }
+  .agency-btn:hover .agency-btn__circle {
+    width: calc(100% - 4px);
+  }
+  .agency-btn:hover {
+    color: var(--agency-primary-deep);
+  }
+  .agency-btn__icon {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    color: var(--agency-primary-deep);
+  }
+  /* Outline variant (dark text/border on light bg) */
+  .agency-btn-outline {
+    position: relative;
+    display: inline-flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    gap: 1.75rem;
+    padding: 0.75rem 0.75rem 0.75rem 2.5rem;
+    border-radius: 9999px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    line-height: 1;
+    color: #111;
+    border: 1px solid #111;
+    background: transparent;
+    transition: color 0.3s ease, border-color 0.3s ease;
+    white-space: nowrap;
+  }
+  .agency-btn-outline:hover {
+    color: var(--agency-primary);
+  }
+  .agency-btn-outline.is-white {
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.9);
+  }
+  .agency-btn-outline.is-white:hover {
+    color: #fff;
+    border-color: #fff;
+  }
+  .agency-btn-outline .agency-btn__icon {
+    width: 28px;
+    height: 28px;
+    color: currentColor;
+  }
+
+  /* Work / feature card */
+  .agency-card {
+    border-radius: 1rem;
+    background: #fff;
+    padding: 1.5rem;
+    height: 100%;
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+  }
+  .agency-card:hover {
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    transform: translateY(-4px);
+  }
+}
+
+/* Infinite marquee */
+@keyframes agency-marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-100%); }
+}
+.agency-marquee {
+  display: flex;
+  width: 100%;
+  overflow: hidden;
+}
+.agency-marquee__track {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  white-space: nowrap;
+  animation: agency-marquee var(--marquee-duration, 40s) linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .agency-marquee__track { animation: none; }
+}
+
+/* Scroll cue line */
+@keyframes agency-line-expand {
+  from { height: 100px; }
+  to { height: 0; }
+}
+.agency-scroll-line {
+  width: 1px;
+  height: 100px;
+  background-color: #111;
+  animation: agency-line-expand 1.5s linear infinite;
+}
+
 /* Critical path optimization */
 .above-fold {
   content-visibility: visible;

@@ -6,6 +6,7 @@ import { Play, X } from 'lucide-react'
 import { AnimatePresence, motion } from 'framer-motion'
 import Image from 'next/image'
 import { useLanguage } from '@/contexts/language-context'
+import { Eyebrow, GradientText } from '@/components/agency/agency-ui'
 
 export default function PromoPage() {
    const { t } = useLanguage()
@@ -218,12 +219,12 @@ export default function PromoPage() {
                initial={{ opacity: 1, y: 20 }}
                animate={{ opacity: 1, y: 0 }}
                transition={{ duration: 0.8 }}
-               className='text-center mb-8'
+               className='flex flex-col items-center text-center mb-12'
             >
-               <h1 className='text-3xl md:text-4xl font-bold mb-6'>
-                  {pageTitle}
+               <Eyebrow center>Portfolio</Eyebrow>
+               <h1 className='mt-3 font-display text-4xl md:text-5xl font-semibold mb-2 text-gray-900'>
+                  <GradientText>{pageTitle}</GradientText>
                </h1>
-               <div className='w-40 h-0.5 bg-primary mx-auto mb-8'></div>
             </motion.div>
 
             {/* Featured Video + Right Text */}
@@ -235,7 +236,7 @@ export default function PromoPage() {
             >
                <div className='grid px-8 grid-cols-1 lg:grid-cols-2 gap-8 items-center'>
                   <div
-                     className='relative aspect-video w-full rounded-lg overflow-hidden shadow-lg cursor-pointer group'
+                     className='relative aspect-video w-full rounded-3xl overflow-hidden shadow-lg cursor-pointer group'
                      onClick={() => {
                         setSelectedVideo(videoData.featuredVideoUrl)
                         setSelectedVideoData({ title: featuredVideo.title })
@@ -278,7 +279,7 @@ export default function PromoPage() {
                      initial={{ opacity: 1, y: 20 }}
                      animate={{ opacity: 1, y: 0 }}
                      transition={{ duration: 0.6, delay: index * 0.1 }}
-                     className='group overflow-hidden rounded-lg border bg-card shadow-sm transition-all hover:shadow-md'
+                     className='group overflow-hidden rounded-3xl border bg-card shadow-sm transition-all hover:shadow-[rgba(100,100,111,0.2)_0px_7px_29px_0px] hover:-translate-y-1'
                   >
                      <div className='relative aspect-video'>
                         <Image

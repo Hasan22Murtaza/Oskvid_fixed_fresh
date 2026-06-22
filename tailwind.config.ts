@@ -40,6 +40,8 @@ const config: Config = {
       fontFamily: {
         sans: ["var(--font-space-grotesk)", "system-ui", "sans-serif"],
         "space-grotesk": ["var(--font-space-grotesk)", "system-ui", "sans-serif"],
+        kameron: ["var(--font-kameron)", "Georgia", "serif"],
+        display: ["var(--font-kameron)", "Georgia", "serif"],
       },
       colors: {
         border: "hsl(var(--border))",

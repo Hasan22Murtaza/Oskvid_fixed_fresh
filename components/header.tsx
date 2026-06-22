@@ -10,6 +10,7 @@ import { Menu, X, ChevronDown } from "lucide-react"
 import { LanguageSwitcher } from "@/components/language-switcher"
 import { useLanguage } from "@/contexts/language-context"
 import { OptimizedImage } from "@/components/optimized-image"
+import { AgencyButton } from "@/components/agency/agency-ui"
 
 export default function Header() {
   const [isOpen, setIsOpen] = React.useState(false)
@@ -84,19 +85,32 @@ export default function Header() {
   // Use a stable class before mount to match server render (scrolled=false)
   const isScrolled = mounted && scrolled
 
+  const navLinkClass = (isActive: boolean) =>
+    cn(
+      "rounded-full px-4 py-2 text-sm font-medium transition-all duration-200",
+      isActive
+        ? "bg-[#cc5339] text-white"
+        : "text-gray-900 hover:bg-[#cc5339] hover:text-white",
+    )
+
   return (
     <header
       className={cn(
-        "fixed top-0 z-50 w-full transition-all duration-300 ease-in-out",
+        "fixed z-50 left-3 right-3 top-3 rounded-full border border-white/40 backdrop-blur-md transition-all duration-300 ease-in-out lg:left-10 lg:right-10",
         isScrolled
-          ? "bg-white/95 backdrop-blur-md shadow-sm border-b border-gray-100"
-          : "bg-black/20 backdrop-blur-sm",
+          ? "bg-white/80 shadow-[0_4px_20px_rgba(0,0,0,0.10)]"
+          : "bg-white/60 shadow-[0_2px_12px_rgba(0,0,0,0.06)]",
       )}
     >
-      <div className="container mx-auto flex h-16 sm:h-18 md:h-20 lg:h-22 xl:h-24 items-center justify-between px-3 sm:px-4 md:px-6 lg:px-8 xl:px-12 2xl:px-16 max-w-8xl">
+      <div
+        className={cn(
+          "mx-auto flex items-center justify-between transition-all duration-300 max-w-8xl",
+          isScrolled ? "h-16 px-4 sm:px-6" : "h-16 px-4 sm:h-[72px] sm:px-6",
+        )}
+      >
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 z-10 touch-target">
-          <div className="relative h-12 w-28 sm:h-16 sm:w-36 md:h-18 md:w-40 lg:h-20 lg:w-44 xl:h-22 xl:w-48 overflow-visible">
+          <div className="relative h-10 w-24 sm:h-11 sm:w-28 md:h-12 md:w-32 lg:h-12 lg:w-36 overflow-visible">
             <OptimizedImage
               src="/oskvid-logo-new.png"
               alt="OSKVID Videography Logo"
@@ -105,9 +119,7 @@ export default function Header() {
               priority
               className="object-contain transition-all duration-300"
               style={{
-                filter: isScrolled
-                  ? "contrast(1.1) brightness(1.05)"
-                  : "drop-shadow(0 0 8px rgba(255,255,255,0.8))",
+                filter: "contrast(1.1) brightness(1.05)",
               }}
             />
           </div>
@@ -115,7 +127,7 @@ export default function Header() {
 
         {/* Desktop Navigation */}
         <nav className="hidden lg:block">
-          <ul className="flex items-center gap-8">
+          <ul className="flex items-center gap-1">
             {routes.map((route) => {
               const isActive = pathname === route.href || (route.href !== "/" && pathname.startsWith(route.href))
 
@@ -129,14 +141,7 @@ export default function Header() {
                   >
                     <Link
                       href={route.href}
-                      className={cn(
-                        "flex cursor-pointer items-center text-sm font-medium transition-all duration-200 relative py-2",
-                        isActive
-                          ? "text-[#cc5339] font-semibold after:content-[''] after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-[#cc5339] after:rounded-full"
-                          : isScrolled
-                            ? "text-gray-700 hover:text-[#cc5339]"
-                            : "text-white hover:text-[#cc5339]",
-                      )}
+                      className={cn("flex cursor-pointer items-center", navLinkClass(isActive))}
                     >
                       {route.label}
                       <ChevronDown className="ml-1 h-4 w-4 transition-transform duration-200" />
@@ -145,7 +150,7 @@ export default function Header() {
                     {/* Dropdown Menu */}
                     <div
                       className={cn(
-                        "absolute top-full left-0 mt-1 w-56 bg-white rounded-lg shadow-lg border border-gray-100 py-2 transition-all duration-200 z-50",
+                        "absolute top-full left-0 mt-2 w-56 bg-white rounded-2xl shadow-lg border border-gray-100 py-2 transition-all duration-200 z-50",
                         showPortfolioDropdown
                           ? "opacity-100 visible translate-y-0"
                           : "opacity-0 invisible -translate-y-2 pointer-events-none",
@@ -172,17 +177,7 @@ export default function Header() {
 
               return (
                 <li key={route.href}>
-                  <Link
-                    href={route.href}
-                    className={cn(
-                      "text-sm font-medium transition-all duration-200 relative py-2",
-                      isActive
-                        ? "text-[#cc5339] font-semibold after:content-[''] after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-[#cc5339] after:rounded-full"
-                        : isScrolled
-                          ? "text-gray-700 hover:text-[#cc5339]"
-                          : "text-white hover:text-[#cc5339]",
-                    )}
-                  >
+                  <Link href={route.href} className={navLinkClass(isActive)}>
                     {route.label}
                   </Link>
                 </li>
@@ -192,7 +187,10 @@ export default function Header() {
         </nav>
 
         {/* Right Side Actions */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3">
+          <div className="hidden lg:block">
+            <AgencyButton href="/oskvid-kontakti">Sazināties</AgencyButton>
+          </div>
           <LanguageSwitcher />
 
           {/* Mobile Menu Button */}
@@ -201,12 +199,7 @@ export default function Header() {
               <Button
                 variant="ghost"
                 size="icon"
-                className={cn(
-                  "transition-colors duration-200 touch-target h-11 w-11 sm:h-12 sm:w-12",
-                  isScrolled
-                    ? "text-gray-700 hover:text-[#cc5339]"
-                    : "text-white hover:text-[#cc5339]",
-                )}
+                className="transition-colors duration-200 touch-target h-11 w-11 sm:h-12 sm:w-12 text-gray-700 hover:text-[#cc5339]"
               >
                 <Menu className="h-6 w-6" />
                 <span className="sr-only">Toggle menu</span>
