@@ -117,10 +117,10 @@ export function AgencyButton({
   const inner = (
     <>
       <span className="agency-btn__icon">
-        {isPrimary ? <span className="agency-btn__circle" /> : null}
-        <ArrowRight className="relative h-4 w-4" />
+        <ArrowRight className="relative h-[18px] w-[18px]" />
       </span>
-      <span className="relative z-10">{children}</span>
+      {isPrimary ? <span className="agency-btn__circle" /> : null}
+      <span className="relative z-[11]">{children}</span>
     </>
   )
 

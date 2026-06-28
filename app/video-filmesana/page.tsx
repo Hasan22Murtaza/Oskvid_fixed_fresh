@@ -728,7 +728,7 @@ export default function PakalpojumiPage() {
                                                 )}
                                              </Link>
                                              <Link
-                                                href={activeService==0?'/portfolio/kazu-video-latvija': '/portfolio/reklamas-video'}
+                                                href='/portfolio'
                                                 className='flex-1 bg-white hover:bg-gray-50 border-2 border-gray-200 hover:border-gray-300 text-gray-800 hover:text-gray-900 font-bold py-4 px-6 rounded-xl shadow-md hover:shadow-lg transform hover:scale-[1.02] transition-all duration-300 flex items-center justify-center text-center'
                                              >
                                                 {activeService === 0 && (

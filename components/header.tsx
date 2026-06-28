@@ -6,9 +6,8 @@ import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
-import { Menu, X, ChevronDown } from "lucide-react"
+import { Menu, X } from "lucide-react"
 import { LanguageSwitcher } from "@/components/language-switcher"
-import { useLanguage } from "@/contexts/language-context"
 import { OptimizedImage } from "@/components/optimized-image"
 import { AgencyButton } from "@/components/agency/agency-ui"
 
@@ -16,10 +15,7 @@ export default function Header() {
   const [isOpen, setIsOpen] = React.useState(false)
   const [scrolled, setScrolled] = React.useState(false)
   const [mounted, setMounted] = React.useState(false)
-  const [showPortfolioDropdown, setShowPortfolioDropdown] = React.useState(false)
   const pathname = usePathname()
-  const { t } = useLanguage()
-  const dropdownTimeoutRef = React.useRef<NodeJS.Timeout | null>(null)
 
   // Mark as mounted so scroll-dependent classes only apply client-side
   React.useEffect(() => {
@@ -50,37 +46,10 @@ export default function Header() {
     { href: "/kazu-blogs", label: "Blogs" },
     { href: "/video-filmesana", label: "Pakalpojumi" },
     { href: "/par-oskvid", label: "Par mums" },
-    { href: "/portfolio", label: "Portfolio", hasDropdown: true },
+    { href: "/portfolio", label: "Portfolio" },
     { href: "/atsauksmes", label: "Atsauksmes" },
     { href: "/oskvid-kontakti", label: "Kontakti" },
   ]
-
-  const portfolioItems = [
-    { href: "/portfolio/kazu-video-latvija", label: t("portfolioItems.weddings") || "Weddings" },
-    { href: "/portfolio/reklamas-video", label: t("portfolioItems.promotional") || "Promotional Videos" },
-  ]
-
-  const handleMouseEnter = () => {
-    if (dropdownTimeoutRef.current) {
-      clearTimeout(dropdownTimeoutRef.current)
-      dropdownTimeoutRef.current = null
-    }
-    setShowPortfolioDropdown(true)
-  }
-
-  const handleMouseLeave = () => {
-    dropdownTimeoutRef.current = setTimeout(() => {
-      setShowPortfolioDropdown(false)
-    }, 150)
-  }
-
-  React.useEffect(() => {
-    return () => {
-      if (dropdownTimeoutRef.current) {
-        clearTimeout(dropdownTimeoutRef.current)
-      }
-    }
-  }, [])
 
   // Use a stable class before mount to match server render (scrolled=false)
   const isScrolled = mounted && scrolled
@@ -114,8 +83,8 @@ export default function Header() {
             <OptimizedImage
               src="/oskvid-logo-new.png"
               alt="OSKVID Videography Logo"
-              width={208}
-              height={88}
+              width={50}
+              height={50}
               priority
               className="object-contain transition-all duration-300"
               style={{
@@ -130,50 +99,6 @@ export default function Header() {
           <ul className="flex items-center gap-1">
             {routes.map((route) => {
               const isActive = pathname === route.href || (route.href !== "/" && pathname.startsWith(route.href))
-
-              if (route.hasDropdown) {
-                return (
-                  <li
-                    key={route.href}
-                    className="relative"
-                    onMouseEnter={() => handleMouseEnter()}
-                    onMouseLeave={() => handleMouseLeave()}
-                  >
-                    <Link
-                      href={route.href}
-                      className={cn("flex cursor-pointer items-center", navLinkClass(isActive))}
-                    >
-                      {route.label}
-                      <ChevronDown className="ml-1 h-4 w-4 transition-transform duration-200" />
-                    </Link>
-
-                    {/* Dropdown Menu */}
-                    <div
-                      className={cn(
-                        "absolute top-full left-0 mt-2 w-56 bg-white rounded-2xl shadow-lg border border-gray-100 py-2 transition-all duration-200 z-50",
-                        showPortfolioDropdown
-                          ? "opacity-100 visible translate-y-0"
-                          : "opacity-0 invisible -translate-y-2 pointer-events-none",
-                      )}
-                    >
-                      {portfolioItems.map((item) => (
-                        <Link
-                          key={item.href}
-                          href={item.href}
-                          className={cn(
-                            "block px-4 py-2 text-sm transition-colors duration-150",
-                            pathname === item.href
-                              ? "text-[#cc5339] bg-orange-50 font-medium"
-                              : "text-gray-700 hover:text-[#cc5339] hover:bg-gray-50",
-                          )}
-                        >
-                          {item.label}
-                        </Link>
-                      ))}
-                    </div>
-                  </li>
-                )
-              }
 
               return (
                 <li key={route.href}>
@@ -237,43 +162,6 @@ export default function Header() {
                 <nav className="flex flex-col gap-1">
                   {routes.map((route) => {
                     const isActive = pathname === route.href || (route.href !== "/" && pathname.startsWith(route.href))
-
-                    if (route.hasDropdown) {
-                      return (
-                        <div key={route.href} className="space-y-2">
-                          <Link
-                            href={route.href}
-                            onClick={() => setIsOpen(false)}
-                            className={cn(
-                              "flex cursor-pointer items-center justify-between rounded-lg px-4 py-4 text-base font-medium transition-colors duration-150 touch-target min-h-[56px]",
-                              isActive
-                                ? "text-[#cc5339] bg-orange-50 border-l-4 border-[#cc5339]"
-                                : "text-gray-700 hover:bg-gray-50 hover:text-[#cc5339]",
-                            )}
-                          >
-                            {route.label}
-                            <ChevronDown className="h-4 w-4" />
-                          </Link>
-                          <div className="ml-4 space-y-1 border-l-2 border-gray-100 pl-4">
-                            {portfolioItems.map((item) => (
-                              <Link
-                                key={item.href}
-                                href={item.href}
-                                onClick={() => setIsOpen(false)}
-                                className={cn(
-                                  "block rounded-lg px-4 py-3 text-sm transition-colors duration-150 touch-target min-h-[48px] flex items-center",
-                                  pathname === item.href
-                                    ? "text-[#cc5339] bg-orange-50 font-medium"
-                                    : "text-gray-600 hover:bg-gray-50 hover:text-[#cc5339]",
-                                )}
-                              >
-                                {item.label}
-                              </Link>
-                            ))}
-                          </div>
-                        </div>
-                      )
-                    }
 
                     return (
                       <Link

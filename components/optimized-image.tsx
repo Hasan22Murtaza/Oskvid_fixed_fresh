@@ -50,15 +50,7 @@ export function OptimizedImage({
       quality={quality}
       sizes={responsiveSizes}
       className={mobileOptimizedClassName}
-      style={{
-        objectFit: "contain",
-        maxWidth: fill ? "100%" : "150%",
-        maxHeight: fill ? "100%" : "150%",
-        objectPosition: "center",
-        height: fill ? undefined : "auto",
-        width: fill ? undefined : "auto",
-        ...style,
-      }}
+
     />
   )
 }

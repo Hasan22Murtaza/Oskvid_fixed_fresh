@@ -422,15 +422,15 @@
   /* Pill button with expanding circle + arrow (matches design .custom_primary) */
   .agency-btn {
     position: relative;
-    z-index: 1;
+    z-index: 11;
     display: inline-flex;
     flex-direction: row-reverse;
     align-items: center;
-    gap: 1.75rem;
-    padding: 0.75rem 0.75rem 0.75rem 2.5rem;
-    border-radius: 9999px;
-    font-weight: 600;
-    font-size: 0.95rem;
+    gap: 30px;
+    padding: 15px 12px 15px 30px;
+    border-radius: 50px;
+    font-weight: 500;
+    font-size: 16px;
     line-height: 1;
     color: #fff;
     background: var(--agency-gradient-br);
@@ -442,43 +442,45 @@
     position: absolute;
     z-index: -1;
     right: 2px;
-    top: 2px;
-    bottom: 2px;
+    top: 50%;
+    transform: translateY(-50%);
     width: 44px;
-    border-radius: 9999px;
+    height: 44px;
+    border-radius: 28px;
     background: #fff;
-    transition: width 0.35s cubic-bezier(0.1, 0.7, 0, 1);
+    transition: width 0.3s ease;
   }
   .agency-btn:hover .agency-btn__circle {
-    width: calc(100% - 4px);
+    width: 98%;
   }
   .agency-btn:hover {
     color: var(--agency-primary-deep);
   }
   .agency-btn__icon {
     position: relative;
-    display: flex;
+    z-index: 11;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 40px;
-    height: 40px;
+    padding-right: 5px;
     flex-shrink: 0;
     color: var(--agency-primary-deep);
   }
   /* Outline variant (dark text/border on light bg) */
   .agency-btn-outline {
     position: relative;
+    z-index: 11;
     display: inline-flex;
     flex-direction: row-reverse;
     align-items: center;
-    gap: 1.75rem;
-    padding: 0.75rem 0.75rem 0.75rem 2.5rem;
-    border-radius: 9999px;
+    gap: 30px;
+    padding: 12px 12px 12px 40px;
+    border-radius: 50px;
     font-weight: 600;
-    font-size: 0.95rem;
+    font-size: 16px;
     line-height: 1;
-    color: #111;
-    border: 1px solid #111;
+    color: #000;
+    border: 1px solid #000;
     background: transparent;
     transition: color 0.3s ease, border-color 0.3s ease;
     white-space: nowrap;
@@ -495,8 +497,6 @@
     border-color: #fff;
   }
   .agency-btn-outline .agency-btn__icon {
-    width: 28px;
-    height: 28px;
     color: currentColor;
   }
 

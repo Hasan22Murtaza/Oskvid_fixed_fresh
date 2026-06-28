@@ -518,14 +518,14 @@ const PROJECTS = [
   {
     title: "Kāzu video",
     image: "/images/wedding-couple-church.jpeg",
-    href: "/portfolio/kazu-video-latvija",
+    href: "/portfolio",
     tags: ["Filmēšana", "Montāža"],
     desc: "Emocionāli kāzu stāsti, iemūžināti kino kvalitātē.",
   },
   {
     title: "Reklāmas video",
     image: "/images/professional-equipment.jpeg",
-    href: "/portfolio/reklamas-video",
+    href: "/portfolio",
     tags: ["Reklāma", "Koncepts"],
     desc: "Pārdodoši reklāmas video zīmoliem un produktiem.",
   },
@@ -538,7 +538,7 @@ const PROJECTS = [
   },
   {
     title: "Drona uzņēmumi",
-    image: "/images/drone-shot.png",
+    image: "/images/drone.jpg",
     href: "/portfolio",
     tags: ["Drons", "Aerial"],
     desc: "Iespaidīgi skati no putna lidojuma visā Latvijā.",
@@ -689,8 +689,8 @@ function NewsletterSection() {
                   <h4 className="pb-3 font-medium text-gray-900">Pakalpojumi</h4>
                   <ul className="space-y-2">
                     {[
-                      { label: "Kāzu video", href: "/portfolio/kazu-video-latvija" },
-                      { label: "Reklāmas video", href: "/portfolio/reklamas-video" },
+                      { label: "Kāzu video", href: "/portfolio" },
+                      { label: "Reklāmas video", href: "/portfolio" },
                       { label: "Korporatīvie video", href: "/video-filmesana" },
                       { label: "Drona uzņēmumi", href: "/video-filmesana" },
                     ].map((s) => (
@@ -788,13 +788,14 @@ export default function Home() {
         <div className="relative h-[78vh] min-h-[560px] overflow-hidden rounded-[20px]">
           {/* Background */}
           <div className="absolute inset-0">
-            <DynamicImage
-              contentKey="homeHeroBackgroundImage"
-              fallback="/images/videographer-sunset.jpeg"
-              alt="Oskvid video"
-              fill
-              priority
-              className="object-cover"
+            <video
+              src="/videos/homeHeroBackgroundImage-simple-cms-compressed.webm"
+              poster="/images/videographer-sunset.jpeg"
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="absolute inset-0 h-full w-full object-cover"
             />
             <div className="absolute inset-0 bg-black/40" />
           </div>
