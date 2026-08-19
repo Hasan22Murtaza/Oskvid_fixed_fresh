@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Play, CheckCircle, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 import { DynamicContent, DynamicImage } from '../../components/dynamic-content'
+import { YouTubeEmbed } from '@/components/youtube-embed'
 
 export default function PakalpojumiPage() {
 
@@ -723,7 +724,7 @@ export default function PakalpojumiPage() {
 
          {/* Video Modal */}
          {isVideoOpen && selectedVideo && (
-            <div className='fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4 pt-20 sm:pt-20 md:pt-24 lg:pt-24 xl:pt-28'>
+            <div className='fixed inset-0 bg-black/80 z-[100] flex items-center justify-center p-4'>
                <div className='relative w-full max-w-4xl aspect-video'>
                   <Button
                      onClick={closeVideo}
@@ -731,11 +732,10 @@ export default function PakalpojumiPage() {
                   >
                      Aizvērt
                   </Button>
-                  <iframe
-                     src={selectedVideo.url}
+                  <YouTubeEmbed
+                     url={selectedVideo.url}
                      title={selectedVideo.title}
-                     className='w-full h-full rounded-lg'
-                     allowFullScreen
+                     className='w-full h-full rounded-lg border-0'
                   />
                </div>
             </div>

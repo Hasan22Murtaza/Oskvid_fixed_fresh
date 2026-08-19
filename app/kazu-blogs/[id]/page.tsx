@@ -10,6 +10,7 @@ import { ChevronLeft, Calendar, Clock, Tag, Facebook, Linkedin, Link2, ArrowRigh
 import { absoluteUrl } from '@/lib/site-url'
 import { SeoBreadcrumbs } from '@/components/seo-breadcrumbs'
 import { PAGE_SEO } from '@/lib/seo/pages'
+import { YouTubeEmbed } from '@/components/youtube-embed'
 
 function getYouTubeVideoId(url: string): string | null {
    const match = url.match(
@@ -205,13 +206,10 @@ export default function ArticleDetailPage() {
                                  className='relative w-full overflow-hidden rounded-xl shadow-lg my-6'
                                  style={{ paddingBottom: '56.25%' /* 16:9 */ }}
                               >
-                                 <iframe
-                                    src={`https://www.youtube.com/embed/${videoId}?rel=0&modestbranding=1`}
+                                 <YouTubeEmbed
+                                    videoId={videoId}
                                     title='YouTube video player'
-                                    allow='accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
-                                    allowFullScreen
                                     className='absolute top-0 left-0 w-full h-full border-0'
-                                    loading='lazy'
                                  />
                               </div>
                            )

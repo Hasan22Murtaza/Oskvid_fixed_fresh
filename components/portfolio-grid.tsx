@@ -6,6 +6,8 @@ import Image from 'next/image'
 import { X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { DynamicContent } from './dynamic-content'
+import { YouTubeEmbed } from './youtube-embed'
+import { getYouTubeThumbnailUrl } from '@/lib/youtube'
 
 interface PortfolioItem {
    id: number
@@ -20,31 +22,8 @@ export default function PortfolioGrid() {
    const [selectedItem, setSelectedItem] = useState<PortfolioItem | null>(null)
    const [portfolioItems, setPortfolioItems] = useState<PortfolioItem[]>([])
 
-   // Helper function to extract YouTube ID from URL
-   const extractYouTubeId = (url: string): string => {
-      if (!url) return ''
-
-      // Handle different YouTube URL formats
-      const patterns = [
-         /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\n?#]+)/,
-         /^([a-zA-Z0-9_-]{11})$/, // Direct YouTube ID
-      ]
-
-      for (const pattern of patterns) {
-         const match = url.match(pattern)
-         if (match) return match[1]
-      }
-
-      return url // Return as-is if no pattern matches
-   }
-
-   // Helper function to generate YouTube thumbnail URL
    const generateYouTubeThumbnail = (videoUrl: string): string => {
-      const youtubeId = extractYouTubeId(videoUrl)
-      if (youtubeId && youtubeId !== videoUrl) {
-         return `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`
-      }
-      return '/placeholder.svg'
+      return getYouTubeThumbnailUrl(videoUrl)
    }
 
    useEffect(() => {
@@ -285,7 +264,7 @@ export default function PortfolioGrid() {
                      initial={{ opacity: 1 }}
                      animate={{ opacity: 1 }}
                      exit={{ opacity: 0 }}
-                     className='fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4'
+                     className='fixed inset-0 bg-black/50 backdrop-blur-sm z-[100] flex items-center justify-center p-4'
                      onClick={() => setSelectedItem(null)}
                   >
                      <motion.div
@@ -313,19 +292,9 @@ export default function PortfolioGrid() {
                            <div className='relative aspect-video mb-6 rounded-xl overflow-hidden bg-black shadow-lg'>
                               {/* The youtubeId field is removed from PortfolioItem, so this block is removed */}
                               {selectedItem.videoUrl ? (
-                                 <iframe
-                                    src={`https://www.youtube.com/embed/${extractYouTubeId(selectedItem.videoUrl)}?autoplay=0&rel=0&modestbranding=1&enablejsapi=1`}
+                                 <YouTubeEmbed
+                                    url={selectedItem.videoUrl}
                                     title={selectedItem.title}
-                                    className='w-full h-full'
-                                    frameBorder='0'
-                                    allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'
-                                    allowFullScreen
-                                    onError={() =>
-                                       console.log(
-                                          'Video loading error for URL:',
-                                          selectedItem.videoUrl,
-                                       )
-                                    }
                                  />
                               ) : (
                                  <div className='w-full h-full flex items-center justify-center text-white'>

@@ -6,6 +6,8 @@ import { Play, X } from 'lucide-react'
 import { AnimatePresence, motion } from 'framer-motion'
 import Image from 'next/image'
 import { useLanguage } from '@/contexts/language-context'
+import { YouTubeEmbed } from '@/components/youtube-embed'
+import { getYouTubeThumbnailUrl } from '@/lib/youtube'
 
 export default function PromoPage() {
    const { t } = useLanguage()
@@ -15,7 +17,6 @@ export default function PromoPage() {
       title: string
       description?: string
    } | null>(null)
-   const [origin, setOrigin] = useState<string>('')
    const [isMobile, setIsMobile] = useState(false)
 
    const [videoData, setVideoData] = useState({
@@ -58,18 +59,12 @@ export default function PromoPage() {
       return url
    }
 
-   // Generate thumbnail URL
    const generateYouTubeThumbnail = (videoUrl: string): string => {
-      const youtubeId = extractYouTubeId(videoUrl)
-      if (youtubeId && youtubeId !== videoUrl) {
-         return `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`
-      }
-      return '/placeholder.svg'
+      return getYouTubeThumbnailUrl(videoUrl)
    }
 
    // Load everything from localStorage + handle updates
    useEffect(() => {
-      setOrigin(window.location.origin)
       const savedPageTitle = localStorage.getItem('content_portfolioPromoTitle')
       if (savedPageTitle) {
          setPageTitle(savedPageTitle)
@@ -318,7 +313,7 @@ export default function PromoPage() {
                      initial={{ opacity: 1 }}
                      animate={{ opacity: 1 }}
                      exit={{ opacity: 0 }}
-                     className='fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4'
+                     className='fixed inset-0 bg-black/50 backdrop-blur-sm z-[100] flex items-center justify-center p-4'
                      onClick={() => setSelectedVideo(null)}
                   >
                      <motion.div
@@ -346,19 +341,9 @@ export default function PromoPage() {
                            <div className='relative aspect-video mb-6 rounded-xl overflow-hidden bg-black shadow-lg'>
                               {/* The youtubeId field is removed from PortfolioItem, so this block is removed */}
                               {selectedVideo ? (
-                                 <iframe
-                                    src={`https://www.youtube.com/embed/${extractYouTubeId(selectedVideo)}?autoplay=0&rel=0&modestbranding=1&enablejsapi=1`}
+                                 <YouTubeEmbed
+                                    url={selectedVideo}
                                     title={selectedVideoData?.title}
-                                    className='w-full h-full'
-                                    frameBorder='0'
-                                    allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'
-                                    allowFullScreen
-                                    onError={() =>
-                                       console.log(
-                                          'Video loading error for URL:',
-                                          selectedVideo,
-                                       )
-                                    }
                                  />
                               ) : (
                                  <div className='w-full h-full flex items-center justify-center text-white'>

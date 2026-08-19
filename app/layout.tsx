@@ -47,6 +47,8 @@ export default function RootLayout({
             <link rel='dns-prefetch' href='//fonts.googleapis.com' />
             <link rel='dns-prefetch' href='//fonts.gstatic.com' />
             <link rel='dns-prefetch' href='//www.googletagmanager.com' />
+            <link rel='dns-prefetch' href='//www.youtube-nocookie.com' />
+            <link rel='dns-prefetch' href='//i.ytimg.com' />
 
             <Script
                src='https://www.googletagmanager.com/gtag/js?id=G-QX3V0FVV5P'
@@ -284,7 +286,7 @@ export default function RootLayout({
                   <div className='relative flex min-h-screen flex-col'>
                      <ThreeDBackground />
                      <Header />
-                     <main className='relative z-10 flex-1'>
+                     <main className='relative flex-1'>
                         {children}
 
                         {/* Floating Contact Widget - Fixed */}

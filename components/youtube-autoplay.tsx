@@ -19,8 +19,8 @@ interface YouTubeAutoplayProps {
  */
 export default function YouTubeAutoplay({ videoId, className = '' }: YouTubeAutoplayProps) {
   
-  // Construct the YouTube embed URL with necessary parameters
-  const embedUrl = `https://www.youtube.com/embed/${videoId}?`;
+  // Privacy-enhanced embed so playback still works when third-party cookies are blocked
+  const embedUrl = `https://www.youtube-nocookie.com/embed/${videoId}?`;
   
   // URLSearchParams is used to cleanly manage and encode the parameters
   const params = new URLSearchParams({
@@ -55,6 +55,7 @@ export default function YouTubeAutoplay({ videoId, className = '' }: YouTubeAuto
         frameBorder="0"
         allow="autoplay; encrypted-media; gyroscope; picture-in-picture"
         allowFullScreen
+        referrerPolicy="strict-origin-when-cross-origin"
         loading="eager" // Load video quickly
       />
     </div>

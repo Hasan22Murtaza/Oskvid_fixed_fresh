@@ -1289,7 +1289,7 @@ const extractYouTubeId = (url: string): string => {
 const generateYouTubeThumbnail = (videoUrl: string): string => {
    const youtubeId = extractYouTubeId(videoUrl)
    if (youtubeId && youtubeId !== videoUrl) {
-      return `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`
+      return `https://i.ytimg.com/vi/${youtubeId}/hqdefault.jpg`
    }
    return ''
 }
