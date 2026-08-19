@@ -3,14 +3,32 @@ import { useEffect, useState, useRef } from 'react'
 
 interface HeroVideoProps {
    contentKey?: string
+   fallback?: string
    className?: string
+}
+
+const DEFAULT_HERO_MEDIA =
+   '/videos/homeHeroBackgroundImage-simple-cms-lv-1763580311317.mp4'
+
+function normalizeMediaUrl(url: string, fallback: string): string {
+   if (!url) return fallback
+   if (
+      url.startsWith('/') ||
+      url.startsWith('data:') ||
+      url.startsWith('http://') ||
+      url.startsWith('https://')
+   ) {
+      return url
+   }
+   return `/${url}`
 }
 
 export default function HeroVideo({
    contentKey,
+   fallback = DEFAULT_HERO_MEDIA,
    className = '',
 }: HeroVideoProps) {
-   const [src, setSrc] = useState<string | null>(null)
+   const [src, setSrc] = useState<string>(fallback)
    const [isReady, setIsReady] = useState(false)
    const currentUrlRef = useRef<string | null>(null)
 
@@ -23,34 +41,59 @@ export default function HeroVideo({
       )
    }
 
-   useEffect(() => {
-      if (!contentKey) return
+   const applySrc = (value?: string | null) => {
+      const next = normalizeMediaUrl(value || fallback, fallback)
+      if (next !== currentUrlRef.current) {
+         currentUrlRef.current = next
+         setIsReady(false)
+         setSrc(next)
+      }
+   }
 
+   useEffect(() => {
       const updateMedia = () => {
-         const saved = localStorage.getItem(`content_${contentKey}`)
-         if (!saved) return
-         const normalized = saved.startsWith('/') || saved.startsWith('data:')
-            ? saved
-            : `/${saved}`
-         if (normalized !== currentUrlRef.current) {
-            currentUrlRef.current = normalized
-            setIsReady(false)
-            setSrc(normalized)
+         if (!contentKey) {
+            applySrc(fallback)
+            return
+         }
+         try {
+            applySrc(localStorage.getItem(`content_${contentKey}`) || fallback)
+         } catch {
+            applySrc(fallback)
          }
       }
 
       updateMedia()
+
+      const loadFromApi = async () => {
+         if (!contentKey) return
+         try {
+            const response = await fetch(
+               '/api/content?page=simple-cms&language=lv',
+            )
+            if (!response.ok) return
+            const data = await response.json()
+            const value = data.content?.[contentKey]
+            if (typeof value === 'string' && value) {
+               applySrc(value)
+            }
+         } catch {
+            // Keep the published fallback if the API is unavailable.
+         }
+      }
+
+      loadFromApi()
+
       window.addEventListener('storage', updateMedia)
       window.addEventListener('contentUpdated', updateMedia)
-      const interval = setInterval(updateMedia, 1000)
+      window.addEventListener('cmsContentUpdated', updateMedia)
+
       return () => {
          window.removeEventListener('storage', updateMedia)
          window.removeEventListener('contentUpdated', updateMedia)
-         clearInterval(interval)
+         window.removeEventListener('cmsContentUpdated', updateMedia)
       }
-   }, [contentKey])
-
-   if (!src) return null
+   }, [contentKey, fallback])
 
    return (
       <div className={`relative w-full h-full overflow-hidden ${className}`}>
@@ -62,17 +105,25 @@ export default function HeroVideo({
                muted
                loop
                playsInline
-               preload="auto"
+               preload='auto'
                src={src}
                onCanPlay={() => setIsReady(true)}
+               onError={() => {
+                  if (src !== fallback) applySrc(fallback)
+                  else setIsReady(true)
+               }}
             />
          ) : (
             <img
                key={src}
                src={src}
-               alt="Hero background"
+               alt='Hero background'
                className={`absolute inset-0 w-full h-full object-cover pointer-events-none transition-opacity duration-1000 ${isReady ? 'opacity-100' : 'opacity-0'}`}
                onLoad={() => setIsReady(true)}
+               onError={() => {
+                  if (src !== fallback) applySrc(fallback)
+                  else setIsReady(true)
+               }}
             />
          )}
          <div

@@ -8,7 +8,6 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import Link from "next/link";
 import { useRef } from "react";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
-import { YouTubeEmbed } from "@/components/youtube-embed";
 
 export default function Home() {
   const { t } = useLanguage();
@@ -30,7 +29,7 @@ export default function Home() {
           <div className="h-full w-full  relative bg-black">
             <HeroVideo
               contentKey="homeHeroBackgroundImage"
-              fallback="/images/videographer-sunset.jpeg"
+              fallback="/videos/homeHeroBackgroundImage-simple-cms-lv-1763580311317.mp4"
               className="w-full h-full self-stretch"
             />
           </div>
