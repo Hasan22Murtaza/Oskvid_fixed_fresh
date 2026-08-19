@@ -580,18 +580,22 @@ export async function OPTIONS() {
 
 // GET - Load content
 export async function GET(request: NextRequest) {
+  const { searchParams } = new URL(request.url)
+  const page = searchParams.get('page') || 'homepage'
+  const language = searchParams.get('language') || 'lv'
+  const key = `${page}_${language}`
+
   try {
-    const { searchParams } = new URL(request.url)
-    const page = searchParams.get('page') || 'homepage'
-    const language = searchParams.get('language') || 'lv'
-    
     const content = getContentData()
-    // console.log(content)
-    const key = `${page}_${language}`
     return NextResponse.json({ content: content[key] || {} })
   } catch (error) {
     console.error('Error loading content:', error)
-    return NextResponse.json({ error: 'Failed to load content' }, { status: 500 })
+    try {
+      const seed = (await import('@/data/content.json')).default as Record<string, any>
+      return NextResponse.json({ content: seed?.[key] || {} })
+    } catch {
+      return NextResponse.json({ error: 'Failed to load content' }, { status: 500 })
+    }
   }
 }
 const IMAGE_KEYS = [

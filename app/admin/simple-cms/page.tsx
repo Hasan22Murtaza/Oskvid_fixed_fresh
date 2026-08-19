@@ -801,9 +801,9 @@ const defaultContent: any = {
    partner8Logo: '/partners/compensa-logo.png',
 
    // ABOUT ME PAGE CONTENT
-   aboutPageTitle: 'Par Oskvid',
+   aboutPageTitle: 'Par Osk vid',
    aboutPageBio:
-      'Vajadzētu mazu biogrāfiju par Oskaru un sadarbības partneri, lai klientiem ir interesanti lasīt, kas tad ir Oskars, kas viņam patīk, kas nepatīk, kas aizrauj un protams klāt viņa bildes, lai veidotu uzticamību potenciālajiem klientiem un nerastos jautājumi, kas viņš ir.',
+      'Sveiki! \nEsmu Oskars Andersons, profesionāls videogrāfs ar vairāk nekā 14 gadu pieredzi video nozarē. Šajā laikā esmu pārliecinājies par vienu – labs video nav tikai skaista kadru virkne. Tas ir stāsts, tās ir patiesas emocijas un mirkļi, kas palīdz saglabāt atmiņā to, kas patiešām ir svarīgs.\n\nKino kvalitāte un stāsta spēks\nMans līdz šim lielākais profesionālais izaicinājums un lepnums ir pilnmetrāžas filma, ko vienatnē gan nofilmēju, gan samontēju demonstrēšanai kinoteātrī Splendid Palace. Radīt attēlu un izcilu akustisko skaņu, kas atbilst augstākajiem kino standartiem un ir baudāma uz milzīga ekrāna, bija sarežģīts, bet gandarījumu nesošs process. Šī pieredze man ir iemācījusi no nekā radīt aizraujošu saturu un piesaistīt skatītāju uzmanību no pirmajām sekundēm.\n\nMani pakalpojumi\nEs ticu, ka no visa, kas aizrauj, var izveidot jēgpilnu stāstu. Piedāvāju pilna cikla video pakalpojumus – no idejas līdz gatavam rezultātam:\n\nKāzu video un filmēšana: Radu emocionālus un kinematogrāfiskus kāzu stāstus. Mans mērķis ir iemūžināt jūsu īpašās dienas atmosfēru un patiesās emocijas, radot paliekošu vērtību, kas priecēs gadiem ilgi.\n\nReklāmas video uzņēmumiem: Palīdzu zīmoliem izcelties, veidojot vizuāli pievilcīgus un pārdomātus video projektus.\n\nPasākumu filmēšana: Koncertu, sporta spēļu un korporatīvo notikumu iemūžināšana dinamiskos video.\n\nDrona pakalpojumi un filmēšana no gaisa: Efektīvi un plaši kadri, kas piešķir video pavisam citu mērogu.\n\nKāpēc izvēlēties mani?\nSavā darbā es apvienoju tehnisko precizitāti ar radošumu. Nodrošinu ne tikai pašu filmēšanu, bet arī augstākā līmeņa video montāžu, skaņas apstrādi un krāsu korekciju\n. Katram projektam meklēju īsto noskaņu, lai gala rezultāts būtu ne tikai vizuāli pievilcīgs, bet arī emocionāli spēcīgs.\n\nTrendi mainās, bet īsti mirkļi un emocijas paliek. Ja meklē videogrāfu, kurš pieiet darbam ar sirdi, atbildību un kino nozares standartiem atbilstošu profesionalitāti, ar prieku kļūšu par daļu no tava stāsta!\nVideogrāfs Oskars Andersons  ',
    aboutPageHeroTitle: 'MĒS ESAM ŠEIT, LAI PALĪDZĒTU JUMS',
    aboutPageHeroSubtitle: 'Jūsu radošo mediju partneris',
    aboutPageContactTitle: 'Kontaktinformācija',
@@ -811,7 +811,7 @@ const defaultContent: any = {
    aboutPageContactPhone: '+371 20 123 456',
    aboutPageContactAddress: 'Rīga, Latvija',
    aboutPageContactHours: 'P-Pk: 9:00 - 18:00',
-   aboutPageHeroImage: '/images/videographer-studio.jpeg',
+   aboutPageHeroImage: '/images/aboutPageHeroImage-simple-cms-lv.webp',
    aboutPageMainImage: '/images/videographer-studio.jpeg',
    aboutPageLogo: '/oskvid-logo-new.png',
 
@@ -1089,9 +1089,9 @@ const defaultContent: any = {
    service3Image: '/images/studio-purple-lighting.jpeg',
 
    // ABOUT ME PAGE CLICKABLE IMAGES
-   aboutPageClickableImage1: '/images/videographer-tower.jpeg',
-   aboutPageClickableImage2: '/images/videographer-studio.jpeg',
-   aboutPageClickableImage3: '/images/videographer-studio.jpeg',
+   aboutPageClickableImage1: '/images/aboutPageClickableImage1-simple-cms-lv-compressed.png',
+   aboutPageClickableImage2: '/images/aboutPageClickableImage2-simple-cms-lv-compressed.jpg',
+   aboutPageClickableImage3: '/images/aboutPageClickableImage3-simple-cms-lv-compressed.jpg',
 
    // PAKALPOJUMI PAGE DETAILED SERVICE CONTENT
    serviceWeddingTitle: 'Kāzu Video - Virsraksts',

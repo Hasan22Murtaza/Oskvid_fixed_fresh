@@ -119,18 +119,32 @@ function getDb(): Database.Database {
   return db
 }
 
+function getSeedContent(): Record<string, any> {
+  const seed = loadSeed()
+  return seed && typeof seed === 'object' ? seed : {}
+}
+
 // Get all content data
 export function getContentData(): Record<string, any> {
-  const database = getDb()
-  const row = database.prepare('SELECT content_data FROM cms_data WHERE id = 1').get() as { content_data: string } | undefined
-  if (!row) {
-    return {}
-  }
   try {
-    return JSON.parse(row.content_data)
-  } catch {
-    return {}
+    const database = getDb()
+    const row = database.prepare('SELECT content_data FROM cms_data WHERE id = 1').get() as { content_data: string } | undefined
+    if (!row) {
+      return getSeedContent()
+    }
+    try {
+      const parsed = JSON.parse(row.content_data)
+      if (parsed && typeof parsed === 'object' && Object.keys(parsed).length > 0) {
+        return parsed
+      }
+    } catch {
+      // Fall through to bundled published content.
+    }
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.warn('SQLite content load failed, using published seed:', error)
   }
+  return getSeedContent()
 }
 
 // Save all content data

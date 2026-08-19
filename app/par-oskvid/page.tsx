@@ -6,13 +6,13 @@ import { useEffect } from "react"
 import { DynamicImage, DynamicContent } from "@/components/dynamic-content"
 
 const ABOUT_DEFAULTS = {
-  aboutPageTitle: "Par Oskvid",
+  aboutPageTitle: "Par Osk vid",
   aboutPageBio:
-    "OSKVID ir talantīgs un radošs videogrāfs, kurš specializējas augstas kvalitātes video satura veidošanā gan uzņēmumiem, gan privātiem klientiem. Viņa darbi izceļas ar profesionālu filmēšanas stilu, precīzu montāžu un spēju noķert patiesas emocijas jebkurā situācijā.\n\nAr pieredzi dažādos projektos — sākot no reklāmām un pasākumu filmēšanas līdz sociālo tīklu saturam un vizuālajām kampaņām — OSKVID spēj pielāgoties jebkuram projektam un radīt video, kas izceļ klienta stāstu un identitāti.\n\nRadošums, profesionāla pieeja un tehniskā kvalitāte ir galvenās vērtības, kas raksturo OSKVID darbu.",
-  aboutPageHeroImage: "/images/aboutPageHeroImage-simple-cms-lv-.JPG",
-  aboutPageClickableImage1: "/images/aboutPageClickableImage1-simple-cms-lv-.JPG",
-  aboutPageClickableImage2: "/images/aboutPageClickableImage2-simple-cms-lv-.jpg",
-  aboutPageClickableImage3: "/images/aboutPageClickableImage3-simple-cms-lv-.jpg",
+    "Sveiki! \nEsmu Oskars Andersons, profesionāls videogrāfs ar vairāk nekā 14 gadu pieredzi video nozarē. Šajā laikā esmu pārliecinājies par vienu – labs video nav tikai skaista kadru virkne. Tas ir stāsts, tās ir patiesas emocijas un mirkļi, kas palīdz saglabāt atmiņā to, kas patiešām ir svarīgs.\n\nKino kvalitāte un stāsta spēks\nMans līdz šim lielākais profesionālais izaicinājums un lepnums ir pilnmetrāžas filma, ko vienatnē gan nofilmēju, gan samontēju demonstrēšanai kinoteātrī Splendid Palace. Radīt attēlu un izcilu akustisko skaņu, kas atbilst augstākajiem kino standartiem un ir baudāma uz milzīga ekrāna, bija sarežģīts, bet gandarījumu nesošs process. Šī pieredze man ir iemācījusi no nekā radīt aizraujošu saturu un piesaistīt skatītāju uzmanību no pirmajām sekundēm.\n\nMani pakalpojumi\nEs ticu, ka no visa, kas aizrauj, var izveidot jēgpilnu stāstu. Piedāvāju pilna cikla video pakalpojumus – no idejas līdz gatavam rezultātam:\n\nKāzu video un filmēšana: Radu emocionālus un kinematogrāfiskus kāzu stāstus. Mans mērķis ir iemūžināt jūsu īpašās dienas atmosfēru un patiesās emocijas, radot paliekošu vērtību, kas priecēs gadiem ilgi.\n\nReklāmas video uzņēmumiem: Palīdzu zīmoliem izcelties, veidojot vizuāli pievilcīgus un pārdomātus video projektus.\n\nPasākumu filmēšana: Koncertu, sporta spēļu un korporatīvo notikumu iemūžināšana dinamiskos video.\n\nDrona pakalpojumi un filmēšana no gaisa: Efektīvi un plaši kadri, kas piešķir video pavisam citu mērogu.\n\nKāpēc izvēlēties mani?\nSavā darbā es apvienoju tehnisko precizitāti ar radošumu. Nodrošinu ne tikai pašu filmēšanu, bet arī augstākā līmeņa video montāžu, skaņas apstrādi un krāsu korekciju\n. Katram projektam meklēju īsto noskaņu, lai gala rezultāts būtu ne tikai vizuāli pievilcīgs, bet arī emocionāli spēcīgs.\n\nTrendi mainās, bet īsti mirkļi un emocijas paliek. Ja meklē videogrāfu, kurš pieiet darbam ar sirdi, atbildību un kino nozares standartiem atbilstošu profesionalitāti, ar prieku kļūšu par daļu no tava stāsta!\nVideogrāfs Oskars Andersons  ",
+  aboutPageHeroImage: "/images/aboutPageHeroImage-simple-cms-lv.webp",
+  aboutPageClickableImage1: "/images/aboutPageClickableImage1-simple-cms-lv-compressed.png",
+  aboutPageClickableImage2: "/images/aboutPageClickableImage2-simple-cms-lv-compressed.jpg",
+  aboutPageClickableImage3: "/images/aboutPageClickableImage3-simple-cms-lv-compressed.jpg",
 }
 
 export default function AboutPage() {
