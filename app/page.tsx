@@ -8,6 +8,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import Link from "next/link";
 import { useRef } from "react";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { YouTubeEmbed } from "@/components/youtube-embed";
 
 export default function Home() {
   const { t } = useLanguage();
@@ -246,6 +247,11 @@ export default function Home() {
       </section>
 
       {/* Why Choose Us Section */}
+      <YouTubeEmbed
+        videoId="GWbCaTDDouE"
+        title="YouTube video player"
+        className="mx-auto my-8 aspect-video w-full max-w-[560px] border-0"
+      />
       <section id="why-choose-us" className="section-mobile-padding bg-gray-50">
         <div className="container-mobile-padding mx-auto max-w-8xl">
           <motion.div
