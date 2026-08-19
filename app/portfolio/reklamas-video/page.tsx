@@ -5,17 +5,17 @@ import { motion } from 'framer-motion'
 import { YouTubeEmbed } from '@/components/youtube-embed'
 
 const PROMO_VIDEO_DEFAULTS = {
-   featuredVideoUrl: 'https://www.youtube.com/embed/1Y47gZu8GNs',
-   featuredVideoTitle: 'Maratonu Rokzvaigzne',
+   featuredVideoUrl: 'https://www.youtube.com/embed/YlZjQOeqaB0',
+   featuredVideoTitle: 'Video no videogrāfa skatpunkta',
    video1Url: 'https://youtu.be/cB7tR9HuTcY',
-   video1Title: 'Nordic Homes',
+   video1Title: 'Nordic Homes | Profesionāls uzņēmuma reklāmas video',
    video2Url: 'https://youtu.be/-J8WlbZP7AQ',
-   video2Title: 'Cakes n Bakes Lidosta',
+   video2Title: 'Cakes n’ Bakes Lidosta | Dzimšanas dienas svinības gaisa pusē',
    video3Url: 'https://youtu.be/M0RgMD6B200',
-   video3Title: 'Adventure Ride',
-   pageTitle: 'Pasākumu video | Osk Vid',
+   video3Title: 'Adventure Ride & Matīss Karro | Moto piedzīvojuma video',
+   pageTitle: 'Pasākumu un zīmola (branding) video portfolio',
    rightSideText:
-      'Mūsu 2025. gada reklāmas video demonstrācijas video, kurā redzami efektīvākie un radošākie reklāmas video, ko esam ražojuši gada laikā. Profesionāla reklāmas video ražošana, kas palīdz uzņēmumiem pārdot savus produktus un pakalpojumus efektīvi un radoši.',
+      'Šajā sadaļā esmu apkopojis savus pēdējos darbus, kas fokusējas uz pasākumu enerģijas iemūžināšanu un zīmola identitātes stiprināšanu. Mans mērķis ir palīdzēt uzņēmumiem izstāstīt viņu stāstus tā, lai tie paliktu atmiņā un strādātu kā spēcīgs ilgtermiņa instruments.\n\nVeidojot zīmola (branding) video, es meklēju autentiskumu un vizuālo estētiku, kas visprecīzāk izceļ tava uzņēmuma unikālās vērtības. Savukārt, strādājot pasākumu filmēšanā, es ticu neuzkrītošai klātesamībai – būt tur, kur notiek svarīgākais, un notvert tās īstās emocijas un detaļas, ko bieži vien pamana tikai kameras objektīvs.\n\nEsmu pārliecināts, ka spēcīgākais video saturs top tad, kad tehniskā precizitāte satiekas ar radošu vīziju. Skaties, iedvesmojies un pārliecinies par kvalitāti, ko varu nodrošināt tavam nākamajam projektam.',
 }
 
 function readCmsValue(key: string, fallback: string): string {
@@ -115,28 +115,31 @@ export default function PromoPage() {
             if (!response.ok) return
             const data = await response.json()
             const content = data.content || {}
-            applyVideoUrls({
-               featuredVideoUrl: content.portfolioPromoFeaturedVideoUrl,
-               featuredVideoTitle: content.portfolioPromoFeaturedVideoTitle,
-               video1Url: content.portfolioPromoVideo1Url,
-               video2Url: content.portfolioPromoVideo2Url,
-               video3Url: content.portfolioPromoVideo3Url,
+            const promoKeys = [
+               'portfolioPromoFeaturedVideoUrl',
+               'portfolioPromoFeaturedVideoTitle',
+               'portfolioPromoVideo1Url',
+               'portfolioPromoVideo2Url',
+               'portfolioPromoVideo3Url',
+               'portfolioPromoVideo1Title',
+               'portfolioPromoVideo2Title',
+               'portfolioPromoVideo3Title',
+               'portfolioPromoTitle',
+               'portfolioPromoPageRightText',
+            ] as const
+
+            promoKeys.forEach((key) => {
+               const value = content[key]
+               if (typeof value === 'string' && value.trim()) {
+                  try {
+                     localStorage.setItem(`content_${key}`, value)
+                  } catch {
+                     // Ignore storage quota in private browsing.
+                  }
+               }
             })
-            if (content.portfolioPromoVideo1Title) {
-               setVideo1Title(content.portfolioPromoVideo1Title)
-            }
-            if (content.portfolioPromoVideo2Title) {
-               setVideo2Title(content.portfolioPromoVideo2Title)
-            }
-            if (content.portfolioPromoVideo3Title) {
-               setVideo3Title(content.portfolioPromoVideo3Title)
-            }
-            if (content.portfolioPromoTitle) {
-               setPageTitle(content.portfolioPromoTitle)
-            }
-            if (content.portfolioPromoPageRightText) {
-               setRightSideText(content.portfolioPromoPageRightText)
-            }
+
+            loadFromStorage()
          } catch {
             // Keep published defaults if the API is unavailable.
          }

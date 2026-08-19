@@ -1204,7 +1204,7 @@ const defaultContent: any = {
 
    // PORTFOLIO PAGE MAIN CATEGORY TEXTS
    portfolioWeddingsTitle: 'Kāzu Filmas - Virsraksts',
-   portfolioPromoTitle: 'Reklāmas Video - Virsraksts',
+   portfolioPromoTitle: 'Pasākumu un zīmola (branding) video portfolio',
 
    // PORTFOLIO WEDDINGS PAGE VIDEO TEXTS
    portfolioWeddingVideo1Title:
@@ -1222,25 +1222,26 @@ const defaultContent: any = {
    portfolioWeddingVideo3Url: 'https://www.youtube.com/watch?v=QPLO05GLtoY',
 
    // PORTFOLIO PROMO PAGE VIDEO TEXTS
-   portfolioPromoVideo1Title: 'Reklāmas Video 1 - Virsraksts',
+   portfolioPromoVideo1Title: 'Nordic Homes | Profesionāls uzņēmuma reklāmas video',
    portfolioPromoVideo1Description: 'Reklāmas Video 1 - Apraksts',
-   portfolioPromoVideo1Url: 'https://www.youtube.com/watch?v=0pHoVAbAizc',
-   portfolioPromoVideo2Title: 'Reklāmas Video 2 - Virsraksts',
+   portfolioPromoVideo1Url: 'https://youtu.be/cB7tR9HuTcY',
+   portfolioPromoVideo2Title: 'Cakes n’ Bakes Lidosta | Dzimšanas dienas svinības gaisa pusē',
    portfolioPromoVideo2Description: 'Reklāmas Video 2 - Apraksts',
-   portfolioPromoVideo2Url: 'https://www.youtube.com/watch?v=b60K5KRpeBQ',
-   portfolioPromoVideo3Title: 'Reklāmas Video 3 - Virsraksts',
+   portfolioPromoVideo2Url: 'https://youtu.be/-J8WlbZP7AQ',
+   portfolioPromoVideo3Title: 'Adventure Ride & Matīss Karro | Moto piedzīvojuma video',
    portfolioPromoVideo3Description: 'Reklāmas Video 3 - Apraksts',
-   portfolioPromoVideo3Url: 'https://www.youtube.com/watch?v=0a7bQ0wcJf8',
+   portfolioPromoVideo3Url: 'https://youtu.be/M0RgMD6B200',
 
    // PORTFOLIO CATEGORY PAGES RIGHT-SIDE TEXTS
    portfolioWeddingsPageRightText: 'Kāzu Filmas - Apraksts',
    portfolioWeddingFeaturedVideoUrl:
       'https://www.youtube.com/watch?v=5gmNlP9KF_A',
    portfolioWeddingFeaturedVideoTitle: 'Wedding showreel 2025',
-   portfolioPromoPageRightText: 'Reklāmas Video - Apraksts',
+   portfolioPromoPageRightText:
+      'Šajā sadaļā esmu apkopojis savus pēdējos darbus, kas fokusējas uz pasākumu enerģijas iemūžināšanu un zīmola identitātes stiprināšanu. Mans mērķis ir palīdzēt uzņēmumiem izstāstīt viņu stāstus tā, lai tie paliktu atmiņā un strādātu kā spēcīgs ilgtermiņa instruments.\n\nVeidojot zīmola (branding) video, es meklēju autentiskumu un vizuālo estētiku, kas visprecīzāk izceļ tava uzņēmuma unikālās vērtības. Savukārt, strādājot pasākumu filmēšanā, es ticu neuzkrītošai klātesamībai – būt tur, kur notiek svarīgākais, un notvert tās īstās emocijas un detaļas, ko bieži vien pamana tikai kameras objektīvs.\n\nEsmu pārliecināts, ka spēcīgākais video saturs top tad, kad tehniskā precizitāte satiekas ar radošu vīziju. Skaties, iedvesmojies un pārliecinies par kvalitāti, ko varu nodrošināt tavam nākamajam projektam.',
    portfolioPromoFeaturedVideoUrl:
-      'https://www.youtube.com/watch?v=0pHoVAbAizc',
-   portfolioPromoFeaturedVideoTitle: 'Promotional Showreel 2025',
+      'https://www.youtube.com/embed/YlZjQOeqaB0',
+   portfolioPromoFeaturedVideoTitle: 'Video no videogrāfa skatpunkta',
 
    servicesHeroSubtitle: 'realitātē',
    servicesSectionTitle: 'Mūsu pakalpojumi',
