@@ -21,8 +21,10 @@ const nextConfig = {
   
   // Experimental features
   poweredByHeader: false,
+  serverExternalPackages: ['better-sqlite3'],
   experimental: {
     optimizePackageImports: ['lucide-react'],
+    serverComponentsExternalPackages: ['better-sqlite3'],
   },
   
   // Webpack configuration

@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getStatsData, saveStatsData } from '@/lib/db'
 
+export const runtime = 'nodejs'
+export const dynamic = 'force-dynamic'
+
 // OPTIONS - Handle preflight requests
 export async function OPTIONS() {
   return new NextResponse(null, {

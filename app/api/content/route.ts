@@ -2,6 +2,10 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getContentData, saveContentData } from '@/lib/db'
 import path from 'path'
 import fs from 'node:fs/promises';
+import seedContent from '@/data/content.json'
+
+export const runtime = 'nodejs'
+export const dynamic = 'force-dynamic'
 interface ContentData {
   // HOME PAGE CONTENT
   homeHeroMainTitle: string
@@ -578,17 +582,29 @@ export async function OPTIONS() {
   })
 }
 
+function getPageContent(page: string, language: string) {
+  const key = `${page}_${language}`
+  try {
+    const content = getContentData()
+    if (content && typeof content === 'object' && content[key]) {
+      return content[key]
+    }
+  } catch (error) {
+    console.error('Error loading content from store:', error)
+  }
+
+  const seed = seedContent as Record<string, unknown>
+  return (seed && typeof seed === 'object' && seed[key]) || {}
+}
+
 // GET - Load content
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
     const page = searchParams.get('page') || 'homepage'
     const language = searchParams.get('language') || 'lv'
-    
-    const content = getContentData()
-    // console.log(content)
-    const key = `${page}_${language}`
-    return NextResponse.json({ content: content[key] || {} })
+
+    return NextResponse.json({ content: getPageContent(page, language) })
   } catch (error) {
     console.error('Error loading content:', error)
     return NextResponse.json({ error: 'Failed to load content' }, { status: 500 })
