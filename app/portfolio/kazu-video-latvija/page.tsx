@@ -1,23 +1,13 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Button } from '@/components/ui/button'
-import { Play, X } from 'lucide-react'
-import { AnimatePresence, motion } from 'framer-motion'
-import Image from 'next/image'
+import { motion } from 'framer-motion'
 import { useLanguage } from '@/contexts/language-context'
-import { DynamicContent, DynamicImage } from '@/components/dynamic-content'
+import { DynamicContent } from '@/components/dynamic-content'
 import { YouTubeEmbed } from '@/components/youtube-embed'
-import { getYouTubeThumbnailUrl } from '@/lib/youtube'
 
 export default function WeddingsPage() {
    const { t } = useLanguage()
-   const [selectedVideo, setSelectedVideo] = useState<string | null>(null)
-   const [selectedVideoData, setSelectedVideoData] = useState<{
-      title: string
-      description?: string
-   } | null>(null)
-   const [isMobile, setIsMobile] = useState(false)
    const [videoData, setVideoData] = useState({
       featuredVideoUrl: '',
       video1Url: '',
@@ -45,31 +35,6 @@ export default function WeddingsPage() {
    const [pageTitle, setPageTitle] = useState('Kāzu Filmas')
 
    // Extract YouTube ID from URL if needed
-   const extractYouTubeId = (url: string) => {
-      if (!url) return null
-
-      // Handle different YouTube URL formats including the "si" parameter
-      const patterns = [
-         /(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)/,
-         /youtube\.com\/embed\/([^&\n?#]+)/,
-         /^([a-zA-Z0-9_-]{11})$/, // Direct YouTube ID
-      ]
-
-      for (const pattern of patterns) {
-         const match = url.match(pattern)
-         if (match && match[1]) {
-            // Clean the ID by removing any additional parameters
-            return match[1].split('?')[0].split('&')[0]
-         }
-      }
-
-      return null
-   }
-
-   const generateYouTubeThumbnail = (videoUrl: string): string => {
-      return getYouTubeThumbnailUrl(videoUrl)
-   }
-
    // Load content data from admin CMS
    const loadContentData = () => {
       const featuredVideoTitle =
@@ -257,93 +222,11 @@ export default function WeddingsPage() {
       window.addEventListener('contentUpdated', handleContentUpdate)
       window.addEventListener('storage', handleContentUpdate)
 
-      // Detect mobile device
-      const checkMobile = () => {
-         setIsMobile(window.innerWidth < 768)
-      }
-
-      checkMobile()
-
-      // Only add event listener if window exists
-      if (typeof window !== 'undefined') {
-         window.addEventListener('resize', checkMobile)
-      }
-
       return () => {
-         if (typeof window !== 'undefined') {
-            try {
-               window.removeEventListener('resize', checkMobile)
-               window.removeEventListener('contentUpdated', handleContentUpdate)
-               window.removeEventListener('storage', handleContentUpdate)
-            } catch (error) {
-               console.warn('Error removing event listeners:', error)
-            }
-         }
+         window.removeEventListener('contentUpdated', handleContentUpdate)
+         window.removeEventListener('storage', handleContentUpdate)
       }
    }, [])
-
-   // Prevent body scroll when modal is open
-   useEffect(() => {
-      if (selectedVideo) {
-         document.body.style.overflow = 'hidden'
-         // Prevent zoom on iOS
-         if (typeof document !== 'undefined') {
-            document.addEventListener('touchmove', preventDefault, {
-               passive: false,
-            })
-         }
-      } else {
-         document.body.style.overflow = 'unset'
-         if (typeof document !== 'undefined') {
-            try {
-               document.removeEventListener('touchmove', preventDefault)
-            } catch (error) {
-               console.warn('Error removing touchmove listener:', error)
-            }
-         }
-      }
-
-      return () => {
-         document.body.style.overflow = 'unset'
-         if (typeof document !== 'undefined') {
-            try {
-               document.removeEventListener('touchmove', preventDefault)
-            } catch (error) {
-               console.warn('Error removing touchmove listener:', error)
-            }
-         }
-      }
-   }, [selectedVideo])
-
-   const preventDefault = (e: TouchEvent) => {
-      if (e.touches.length > 1) {
-         e.preventDefault()
-      }
-   }
-
-   // Handle escape key
-   useEffect(() => {
-      const handleEscape = (e: KeyboardEvent) => {
-         if (e.key === 'Escape' && selectedVideo) {
-            setSelectedVideo(null)
-            setSelectedVideoData(null)
-         }
-      }
-
-      if (typeof document !== 'undefined') {
-         document.addEventListener('keydown', handleEscape)
-      }
-
-      return () => {
-         if (typeof document !== 'undefined') {
-            try {
-               document.removeEventListener('keydown', handleEscape)
-            } catch (error) {
-               console.warn('Error removing keydown listener:', error)
-            }
-         }
-      }
-   }, [selectedVideo])
 
    // Galvenais video
    const featuredVideo = {
@@ -357,30 +240,19 @@ export default function WeddingsPage() {
       {
          id: 1,
          title: contentData.video1Title,
-         description: contentData.video1Description,
-         thumbnail: generateYouTubeThumbnail(videoData.video1Url),
          videoUrl: videoData.video1Url,
       },
       {
          id: 2,
          title: contentData.video2Title,
-         description: contentData.video2Description,
-         thumbnail: generateYouTubeThumbnail(videoData.video2Url),
          videoUrl: videoData.video2Url,
       },
       {
          id: 3,
          title: contentData.video3Title,
-         description: contentData.video3Description,
-         thumbnail: generateYouTubeThumbnail(videoData.video3Url),
          videoUrl: videoData.video3Url,
       },
    ]
-
-   const closeVideo = () => {
-      setSelectedVideo(null)
-      setSelectedVideoData(null)
-   }
 
    return (
       <div className='pt-32 pb-20'>
@@ -405,36 +277,12 @@ export default function WeddingsPage() {
                className='mb-16'
             >
                <div className='grid grid-cols-1 px-8 lg:grid-cols-2 gap-8 items-center'>
-                  <div
-                     className='relative aspect-video w-full rounded-lg overflow-hidden shadow-lg cursor-pointer group'
-                     onClick={(e) => {
-                        e.preventDefault()
-                        e.stopPropagation()
-                        setSelectedVideo(videoData.featuredVideoUrl)
-                        setSelectedVideoData({ title: featuredVideo.title })
-                     }}
-                  >
-                     <img
-                        src={generateYouTubeThumbnail(
-                           videoData.featuredVideoUrl,
-                        )}
-                        alt={featuredVideo.title}
-                        className='w-full h-full object-cover'
-                     />
-                     <div className='absolute inset-0 flex items-center justify-center bg-black/30 group-hover:bg-black/50 transition-all'>
-                        <div className='bg-white/90 hover:bg-white rounded-full p-4 transition-all group-hover:scale-110'>
-                           <Play className='h-8 w-8 text-black ml-1' />
-                        </div>
-                     </div>
-                     <div className='absolute bottom-4 left-4 right-4'>
-                        <h3 className='text-white font-semibold text-lg drop-shadow-lg'>
-                           <DynamicContent
-                              contentKey={'portfolioWeddingFeaturedTitle'}
-                              fallback={featuredVideo.title}
-                           />
-                        </h3>
-                     </div>
-                  </div>
+                  <YouTubeEmbed
+                     url={featuredVideo.videoUrl}
+                     title={featuredVideo.title}
+                     clickToPlay
+                     className='aspect-video w-full border-0'
+                  />
                   <div className='space-y-4'>
                      <div className='prose prose-lg' style={{ 
                        whiteSpace: 'pre-wrap', 
@@ -457,122 +305,17 @@ export default function WeddingsPage() {
                      initial={{ opacity: 1, y: 20 }}
                      animate={{ opacity: 1, y: 0 }}
                      transition={{ duration: 0.6, delay: index * 0.1 }}
-                     className='group overflow-hidden rounded-lg border bg-card shadow-sm transition-all hover:shadow-md'
+                     className='overflow-hidden rounded-lg border bg-card shadow-sm'
                   >
-                     <div className='relative aspect-video'>
-                        <Image
-                           src={video.thumbnail || '/placeholder.svg'}
-                           alt={video.title}
-                           fill
-                           className='object-cover'
-                           unoptimized
-                        />
-                        <div className='absolute inset-0 flex items-center justify-center bg-black/0 opacity-0 transition-all group-hover:bg-black/60 group-hover:opacity-100'>
-                           <Button
-                              variant='outline'
-                              size='icon'
-                              className='h-12 w-12 rounded-full border-white text-white hover:bg-white/20 bg-transparent'
-                              onClick={(e) => {
-                                 e.preventDefault()
-                                 e.stopPropagation()
-                                 setSelectedVideo(video.videoUrl)
-                                 setSelectedVideoData({
-                                    title: video.title,
-                                    description: video.description,
-                                 })
-                              }}
-                           >
-                              <Play className='h-6 w-6' />
-                              <span className='sr-only'>
-                                 {t('common.play')}
-                              </span>
-                           </Button>
-                        </div>
-                     </div>
+                     <YouTubeEmbed
+                        url={video.videoUrl}
+                        title={video.title}
+                        clickToPlay
+                        className='aspect-video w-full border-0 rounded-none shadow-none'
+                     />
                   </motion.div>
                ))}
             </div>
-
-            
-            
-            <AnimatePresence>
-               {selectedVideo && (
-                  <motion.div
-                     initial={{ opacity: 1 }}
-                     animate={{ opacity: 1 }}
-                     exit={{ opacity: 0 }}
-                     className='fixed inset-0 bg-black/50 backdrop-blur-sm z-[100] flex items-center justify-center p-4'
-                     onClick={() => setSelectedVideo(null)}
-                  >
-                     <motion.div
-                        initial={{ scale: 0.8, opacity: 1 }}
-                        animate={{ scale: 1, opacity: 1 }}
-                        exit={{ scale: 0.8, opacity: 0 }}
-                        className='bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl border border-white/20 max-w-5xl w-full max-h-[90vh] overflow-y-auto'
-                        onClick={(e) => e.stopPropagation()}
-                     >
-                        {/* Close Button */}
-                        <div className='flex justify-end p-4'>
-                           <Button
-                              variant='ghost'
-                              size='sm'
-                              onClick={() => setSelectedVideo(null)}
-                              className='text-gray-600 hover:text-[#cc5339] hover:bg-orange-50'
-                           >
-                              <X className='w-6 h-6' />
-                           </Button>
-                        </div>
-
-                        {/* Modal Content */}
-                        <div className='px-6 pb-6'>
-                           {/* YouTube Video Embed */}
-                           <div className='relative aspect-video mb-6 rounded-xl overflow-hidden bg-black shadow-lg'>
-                              {/* The youtubeId field is removed from PortfolioItem, so this block is removed */}
-                              {selectedVideo ? (
-                                 <YouTubeEmbed
-                                    url={selectedVideo}
-                                    title={selectedVideoData?.title}
-                                 />
-                              ) : (
-                                 <div className='w-full h-full flex items-center justify-center text-white'>
-                                    <div className='text-center'>
-                                       <p className='text-lg mb-2'>
-                                          Video nav pieejams
-                                       </p>
-                                       <p className='text-sm opacity-75'>
-                                          Pārbaudiet video URL admin panelī
-                                       </p>
-                                    </div>
-                                 </div>
-                              )}
-                           </div>
-
-                           <div className='space-y-4'>
-                              <div>
-                                 {/*<div className='text-[#cc5339] text-sm font-semibold mb-2 uppercase tracking-wide'>
-                                   {selectedVideoData?.title}
-                                 </div>*/}
-                                 <h3 className='text-2xl font-bold text-gray-800 mb-2'>
-                                   {selectedVideoData?.title}
-                                 </h3>
-                              </div>
-
-                              <p style={{ 
-                                whiteSpace: 'pre-wrap', 
-                                wordBreak: 'break-word',
-                                fontFamily: 'inherit'
-                              }}  className='text-gray-600 leading-relaxed'>
-                                {selectedVideoData?.description}
-                              </p>
-                           </div>
-                        </div>
-                     </motion.div>
-                  </motion.div>
-               )}
-            </AnimatePresence>
-            
-            {/* Optimized Video Modal */}
-
          </div>
       </div>
    )
