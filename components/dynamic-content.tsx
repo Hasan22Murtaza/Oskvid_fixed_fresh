@@ -48,7 +48,12 @@ export function DynamicContent({
     setMounted(true)
 
     const handleContentUpdate = (event: CustomEvent) => {
-      if (event.detail.key === contentKey) setContent(event.detail.value)
+      if (event.detail?.key === contentKey && event.detail.value != null) {
+        setContent(event.detail.value)
+        return
+      }
+      const updated = readStorage(contentKey)
+      setContent(updated || fallback)
     }
     const handleStorageChange = () => {
       const updated = readStorage(contentKey)
@@ -89,34 +94,47 @@ export function DynamicImage({
   const [ready, setReady] = useState(false)
 
   useEffect(() => {
-    const saved = readStorage(contentKey)
-    const src = saved || fallback
+    const applySrc = (value?: string | null) => {
+      const src = value || fallback
+      if (!src) {
+        setReady(true)
+        return
+      }
 
-    // Preload the image before swapping so there's no dark flash
-    const img = new window.Image()
-    img.src = src
-    img.onload = () => {
-      setImageSrc(src)
-      setReady(true)
+      const img = new window.Image()
+      img.src = src
+      img.onload = () => {
+        setImageSrc(src)
+        setReady(true)
+      }
+      img.onerror = () => {
+        setImageSrc(fallback || '/placeholder.svg')
+        setReady(true)
+      }
     }
-    img.onerror = () => {
-      setImageSrc(fallback)
-      setReady(true)
-    }
+
+    applySrc(readStorage(contentKey))
 
     const handleImageUpdate = (event: CustomEvent) => {
-      if (event.detail.key === contentKey) setImageSrc(event.detail.value)
+      if (event.detail?.key === contentKey && event.detail.value) {
+        applySrc(event.detail.value)
+        return
+      }
+      applySrc(readStorage(contentKey))
     }
     const handleStorageChange = () => {
-      const updated = readStorage(contentKey)
-      if (updated) setImageSrc(updated)
+      applySrc(readStorage(contentKey))
     }
 
     window.addEventListener('imageUpdated' as any, handleImageUpdate)
+    window.addEventListener('contentUpdated', handleStorageChange)
+    window.addEventListener('cmsContentUpdated', handleStorageChange)
     window.addEventListener('storage', handleStorageChange)
 
     return () => {
       window.removeEventListener('imageUpdated' as any, handleImageUpdate)
+      window.removeEventListener('contentUpdated', handleStorageChange)
+      window.removeEventListener('cmsContentUpdated', handleStorageChange)
       window.removeEventListener('storage', handleStorageChange)
     }
   }, [contentKey, fallback])
@@ -142,7 +160,7 @@ export function DynamicImage({
   if (fill) {
     return (
       <Image
-        src={imageSrc || '/placeholder.svg'}
+        src={imageSrc || fallback || '/placeholder.svg'}
         alt={alt}
         fill
         sizes={sizes}
