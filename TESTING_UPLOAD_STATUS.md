@@ -17,7 +17,6 @@ This guide explains how to test the improved upload and compression status displ
   - Phase-specific status with icons and animations
   - Progress bar (blue for upload, amber pulse for compression)
   - Compression results card (original size, compressed size, savings percentage)
-
 ### 2. Video Upload API (`app/api/videos/upload/route.ts`)
 - **Background Compression**: Videos now compress in the background
 - Returns immediately after upload with original URL
