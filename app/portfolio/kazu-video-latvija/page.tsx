@@ -2,17 +2,35 @@
 
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { useLanguage } from '@/contexts/language-context'
 import { DynamicContent } from '@/components/dynamic-content'
 import { YouTubeEmbed } from '@/components/youtube-embed'
 
+const WEDDING_VIDEO_DEFAULTS = {
+   featuredVideoUrl: 'https://www.youtube.com/embed/8a_XpfUVUP8',
+   featuredVideoTitle: 'Kāzu apskats 2025',
+   video1Url: 'https://youtu.be/oWJXGnwS9nQ',
+   video1Title: 'Oksana un Ruslans  Tīzeris',
+   video2Url: 'https://youtu.be/-y7btCaSARM',
+   video2Title: 'Kāzas Igates Pilī',
+   video3Url: 'https://youtu.be/GmWyD6va0gk',
+   video3Title: 'Wedding Film',
+}
+
+function readCmsValue(key: string, fallback: string): string {
+   if (typeof window === 'undefined') return fallback
+   try {
+      return localStorage.getItem(`content_${key}`) || fallback
+   } catch {
+      return fallback
+   }
+}
+
 export default function WeddingsPage() {
-   const { t } = useLanguage()
    const [videoData, setVideoData] = useState({
-      featuredVideoUrl: '',
-      video1Url: '',
-      video2Url: '',
-      video3Url: '',
+      featuredVideoUrl: WEDDING_VIDEO_DEFAULTS.featuredVideoUrl,
+      video1Url: WEDDING_VIDEO_DEFAULTS.video1Url,
+      video2Url: WEDDING_VIDEO_DEFAULTS.video2Url,
+      video3Url: WEDDING_VIDEO_DEFAULTS.video3Url,
    })
 
    const [contentData, setContentData] = useState({
@@ -37,193 +55,148 @@ export default function WeddingsPage() {
    // Extract YouTube ID from URL if needed
    // Load content data from admin CMS
    const loadContentData = () => {
-      const featuredVideoTitle =
-         localStorage.getItem('content_portfolioWeddingFeaturedVideoTitle') ||
-         'Wedding showreel 2025'
-      const video1Title =
-         localStorage.getItem('content_portfolioWeddingVideo1Title') ||
-         'Destination Wedding in Spain'
-      const video1Description =
-         localStorage.getItem('content_portfolioWeddingVideo1Description') ||
-         'A beautiful destination wedding capturing the romantic moments of Laura and Lucas in the stunning Spanish countryside.'
-      const video2Title =
-         localStorage.getItem('content_portfolioWeddingVideo2Title') ||
-         'Wedding Highlights'
-      const video2Description =
-         localStorage.getItem('content_portfolioWeddingVideo2Description') ||
-         'A cinematic highlight reel showcasing the most emotional and beautiful moments of this special day.'
-      const video3Title =
-         localStorage.getItem('content_portfolioWeddingVideo3Title') ||
-         'Wedding Film'
-      const video3Description =
-         localStorage.getItem('content_portfolioWeddingVideo3Description') ||
-         'A complete wedding film telling the love story from preparation to celebration in artistic detail.'
-
       setContentData({
-         featuredVideoTitle,
-         video1Title,
-         video1Description,
-         video2Title,
-         video2Description,
-         video3Title,
-         video3Description,
+         featuredVideoTitle: readCmsValue(
+            'portfolioWeddingFeaturedVideoTitle',
+            WEDDING_VIDEO_DEFAULTS.featuredVideoTitle,
+         ),
+         video1Title: readCmsValue(
+            'portfolioWeddingVideo1Title',
+            WEDDING_VIDEO_DEFAULTS.video1Title,
+         ),
+         video1Description: readCmsValue(
+            'portfolioWeddingVideo1Description',
+            contentData.video1Description,
+         ),
+         video2Title: readCmsValue(
+            'portfolioWeddingVideo2Title',
+            WEDDING_VIDEO_DEFAULTS.video2Title,
+         ),
+         video2Description: readCmsValue(
+            'portfolioWeddingVideo2Description',
+            contentData.video2Description,
+         ),
+         video3Title: readCmsValue(
+            'portfolioWeddingVideo3Title',
+            WEDDING_VIDEO_DEFAULTS.video3Title,
+         ),
+         video3Description: readCmsValue(
+            'portfolioWeddingVideo3Description',
+            contentData.video3Description,
+         ),
       })
    }
 
-   // Handle content updates
-   const handleContentUpdate = () => {
-      console.log('🔄 Content update detected in weddings page!')
-      // Reload video data
-      const extractYouTubeId = (url: string): string => {
-         if (!url) return ''
-         const patterns = [
-            /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\n?#]+)/,
-            /^([a-zA-Z0-9_-]{11})$/, // Direct YouTube ID
-         ]
-         for (const pattern of patterns) {
-            const match = url.match(pattern)
-            if (match) return match[1]
-         }
-         return url
-      }
-
-      const featuredUrl =
-         localStorage.getItem('content_portfolioWeddingFeaturedVideoUrl') || ''
-      const video1Url =
-         localStorage.getItem('content_portfolioWeddingVideo1Url') || ''
-      const video2Url =
-         localStorage.getItem('content_portfolioWeddingVideo2Url') || ''
-      const video3Url =
-         localStorage.getItem('content_portfolioWeddingVideo3Url') || ''
-
+   const applyVideoUrls = (urls: {
+      featuredVideoUrl?: string
+      video1Url?: string
+      video2Url?: string
+      video3Url?: string
+   }) => {
       setVideoData({
          featuredVideoUrl:
-            featuredUrl && featuredUrl.includes('embed')
-               ? featuredUrl
-               : featuredUrl
-                 ? `https://www.youtube.com/embed/${extractYouTubeId(featuredUrl)}`
-                 : '',
-         video1Url:
-            video1Url && video1Url.includes('embed')
-               ? video1Url
-               : video1Url
-                 ? `https://www.youtube.com/embed/${extractYouTubeId(video1Url)}`
-                 : '',
-         video2Url:
-            video2Url && video2Url.includes('embed')
-               ? video2Url
-               : video2Url
-                 ? `https://www.youtube.com/embed/${extractYouTubeId(video2Url)}`
-                 : '',
-         video3Url:
-            video3Url && video3Url.includes('embed')
-               ? video3Url
-               : video3Url
-                 ? `https://www.youtube.com/embed/${extractYouTubeId(video3Url)}`
-                 : '',
+            urls.featuredVideoUrl || WEDDING_VIDEO_DEFAULTS.featuredVideoUrl,
+         video1Url: urls.video1Url || WEDDING_VIDEO_DEFAULTS.video1Url,
+         video2Url: urls.video2Url || WEDDING_VIDEO_DEFAULTS.video2Url,
+         video3Url: urls.video3Url || WEDDING_VIDEO_DEFAULTS.video3Url,
       })
-
-      loadContentData()
-
-      // Reload page title and right side text
-      const savedPageTitle = localStorage.getItem(
-         'content_portfolioWeddingsTitle',
-      )
-      if (savedPageTitle) {
-         setPageTitle(savedPageTitle)
-      }
-
-      const savedRightSideText = localStorage.getItem(
-         'content_portfolioWeddingsPageRightText',
-      )
-      if (savedRightSideText) {
-         setRightSideText(savedRightSideText)
-      }
    }
 
-   useEffect(() => {
-      // Load video data from admin CMS
-      const loadVideoData = () => {
-         const extractYouTubeId = (url: string): string => {
-            if (!url) return ''
-            const patterns = [
-               /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\n?#]+)/,
-               /^([a-zA-Z0-9_-]{11})$/, // Direct YouTube ID
-            ]
-            for (const pattern of patterns) {
-               const match = url.match(pattern)
-               if (match) return match[1]
-            }
-            return url
-         }
+   const loadVideoData = () => {
+      applyVideoUrls({
+         featuredVideoUrl: readCmsValue(
+            'portfolioWeddingFeaturedVideoUrl',
+            WEDDING_VIDEO_DEFAULTS.featuredVideoUrl,
+         ),
+         video1Url: readCmsValue(
+            'portfolioWeddingVideo1Url',
+            WEDDING_VIDEO_DEFAULTS.video1Url,
+         ),
+         video2Url: readCmsValue(
+            'portfolioWeddingVideo2Url',
+            WEDDING_VIDEO_DEFAULTS.video2Url,
+         ),
+         video3Url: readCmsValue(
+            'portfolioWeddingVideo3Url',
+            WEDDING_VIDEO_DEFAULTS.video3Url,
+         ),
+      })
+   }
 
-         const featuredUrl =
-            localStorage.getItem('content_portfolioWeddingFeaturedVideoUrl') ||
-            ''
-         const video1Url =
-            localStorage.getItem('content_portfolioWeddingVideo1Url') || ''
-         const video2Url =
-            localStorage.getItem('content_portfolioWeddingVideo2Url') || ''
-         const video3Url =
-            localStorage.getItem('content_portfolioWeddingVideo3Url') || ''
-
-         setVideoData({
-            featuredVideoUrl:
-               featuredUrl && featuredUrl.includes('embed')
-                  ? featuredUrl
-                  : featuredUrl
-                    ? `https://www.youtube.com/embed/${extractYouTubeId(featuredUrl)}`
-                    : '',
-            video1Url:
-               video1Url && video1Url.includes('embed')
-                  ? video1Url
-                  : video1Url
-                    ? `https://www.youtube.com/embed/${extractYouTubeId(video1Url)}`
-                    : '',
-            video2Url:
-               video2Url && video2Url.includes('embed')
-                  ? video2Url
-                  : video2Url
-                    ? `https://www.youtube.com/embed/${extractYouTubeId(video2Url)}`
-                    : '',
-            video3Url:
-               video3Url && video3Url.includes('embed')
-                  ? video3Url
-                  : video3Url
-                    ? `https://www.youtube.com/embed/${extractYouTubeId(video3Url)}`
-                    : '',
-         })
-      }
-
-      // Load right-side text content
-      const savedRightSideText = localStorage.getItem(
-         'content_portfolioWeddingsPageRightText',
-      )
-      if (savedRightSideText) {
-         setRightSideText(savedRightSideText)
-      }
-
-      // Load page title from CMS
-      const savedPageTitle = localStorage.getItem(
-         'content_portfolioWeddingsTitle',
-      )
-      if (savedPageTitle) {
-         setPageTitle(savedPageTitle)
-      } else {
-         // Fallback to translation if CMS value not set
-         setPageTitle(t('portfolio.weddings.title'))
-      }
-
-      // Load video data and content data
+   const handleContentUpdate = () => {
       loadVideoData()
       loadContentData()
 
-      // Add event listeners for content updates
+      const savedPageTitle = readCmsValue(
+         'portfolioWeddingsTitle',
+         '',
+      )
+      if (savedPageTitle) setPageTitle(savedPageTitle)
+
+      const savedRightSideText = readCmsValue(
+         'portfolioWeddingsPageRightText',
+         '',
+      )
+      if (savedRightSideText) setRightSideText(savedRightSideText)
+   }
+
+   useEffect(() => {
+      handleContentUpdate()
+
+      const loadFromApi = async () => {
+         try {
+            const response = await fetch(
+               '/api/content?page=simple-cms&language=lv',
+            )
+            if (!response.ok) return
+            const data = await response.json()
+            const content = data.content || {}
+            applyVideoUrls({
+               featuredVideoUrl: content.portfolioWeddingFeaturedVideoUrl,
+               video1Url: content.portfolioWeddingVideo1Url,
+               video2Url: content.portfolioWeddingVideo2Url,
+               video3Url: content.portfolioWeddingVideo3Url,
+            })
+            setContentData((prev) => ({
+               featuredVideoTitle:
+                  content.portfolioWeddingFeaturedVideoTitle ||
+                  prev.featuredVideoTitle,
+               video1Title:
+                  content.portfolioWeddingVideo1Title || prev.video1Title,
+               video1Description:
+                  content.portfolioWeddingVideo1Description ||
+                  prev.video1Description,
+               video2Title:
+                  content.portfolioWeddingVideo2Title || prev.video2Title,
+               video2Description:
+                  content.portfolioWeddingVideo2Description ||
+                  prev.video2Description,
+               video3Title:
+                  content.portfolioWeddingVideo3Title || prev.video3Title,
+               video3Description:
+                  content.portfolioWeddingVideo3Description ||
+                  prev.video3Description,
+            }))
+            if (content.portfolioWeddingsTitle) {
+               setPageTitle(content.portfolioWeddingsTitle)
+            }
+            if (content.portfolioWeddingsPageRightText) {
+               setRightSideText(content.portfolioWeddingsPageRightText)
+            }
+         } catch {
+            // Keep published defaults if the API is unavailable.
+         }
+      }
+
+      loadFromApi()
+
       window.addEventListener('contentUpdated', handleContentUpdate)
+      window.addEventListener('cmsContentUpdated', handleContentUpdate)
       window.addEventListener('storage', handleContentUpdate)
 
       return () => {
          window.removeEventListener('contentUpdated', handleContentUpdate)
+         window.removeEventListener('cmsContentUpdated', handleContentUpdate)
          window.removeEventListener('storage', handleContentUpdate)
       }
    }, [])

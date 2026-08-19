@@ -56,10 +56,12 @@ export function DynamicContent({
     }
 
     window.addEventListener('contentUpdated' as any, handleContentUpdate)
+    window.addEventListener('cmsContentUpdated', handleStorageChange)
     window.addEventListener('storage', handleStorageChange)
 
     return () => {
       window.removeEventListener('contentUpdated' as any, handleContentUpdate)
+      window.removeEventListener('cmsContentUpdated', handleStorageChange)
       window.removeEventListener('storage', handleStorageChange)
     }
   }, [contentKey, fallback])
