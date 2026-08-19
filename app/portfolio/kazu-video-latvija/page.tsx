@@ -13,7 +13,7 @@ const WEDDING_VIDEO_DEFAULTS = {
    video2Url: 'https://youtu.be/-y7btCaSARM',
    video2Title: 'Kāzas Igates Pilī',
    video3Url: 'https://youtu.be/GmWyD6va0gk',
-   video3Title: 'Wedding Film',
+   video3Title: 'Inese un Emīls Tīzeris',
 }
 
 function readCmsValue(key: string, fallback: string): string {
@@ -41,7 +41,7 @@ export default function WeddingsPage() {
       video2Title: 'Wedding Highlights',
       video2Description:
          'A cinematic highlight reel showcasing the most emotional and beautiful moments of this special day.',
-      video3Title: 'Wedding Film',
+      video3Title: 'Inese un Emīls Tīzeris',
       video3Description:
          'A complete wedding film telling the love story from preparation to celebration in artistic detail.',
    })
@@ -213,16 +213,19 @@ export default function WeddingsPage() {
       {
          id: 1,
          title: contentData.video1Title,
+         description: contentData.video1Description,
          videoUrl: videoData.video1Url,
       },
       {
          id: 2,
          title: contentData.video2Title,
+         description: contentData.video2Description,
          videoUrl: videoData.video2Url,
       },
       {
          id: 3,
          title: contentData.video3Title,
+         description: contentData.video3Description,
          videoUrl: videoData.video3Url,
       },
    ]
@@ -283,6 +286,7 @@ export default function WeddingsPage() {
                      <YouTubeEmbed
                         url={video.videoUrl}
                         title={video.title}
+                        description={video.description}
                         clickToPlay
                         className='aspect-video w-full border-0 rounded-none shadow-none'
                      />

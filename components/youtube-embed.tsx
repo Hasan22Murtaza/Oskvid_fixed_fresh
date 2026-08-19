@@ -14,6 +14,7 @@ type YouTubeEmbedProps = {
    url?: string
    videoId?: string
    title?: string
+   description?: string
    className?: string
    autoplay?: boolean
    clickToPlay?: boolean
@@ -23,6 +24,7 @@ export function YouTubeEmbed({
    url,
    videoId,
    title = 'YouTube video player',
+   description,
    className = 'w-full h-full border-0',
    autoplay = false,
    clickToPlay = false,
@@ -100,8 +102,8 @@ export function YouTubeEmbed({
                </div>
             </div>
             {showLabel && (
-               <div className='absolute bottom-4 left-4'>
-                  <h3 className='text-white font-semibold text-lg drop-shadow-lg'>
+               <div className='absolute bottom-4 left-4 right-4'>
+                  <h3 className='text-white font-semibold text-lg drop-shadow-lg truncate'>
                      {title}
                   </h3>
                </div>
@@ -137,6 +139,11 @@ export function YouTubeEmbed({
                               {title}
                            </h3>
                         )}
+                        {description ? (
+                           <p className='mt-3 text-gray-600 leading-relaxed whitespace-pre-wrap'>
+                              {description}
+                           </p>
+                        ) : null}
                      </div>
                   </div>
                </div>,
