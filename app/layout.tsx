@@ -22,7 +22,6 @@ import {
   getWebSiteSchema,
 } from '@/lib/seo/schema'
 import { PAGE_SEO } from '@/lib/seo/pages'
-
 const spaceGrotesk = Space_Grotesk({
    subsets: ['latin'],
    variable: '--font-space-grotesk',
