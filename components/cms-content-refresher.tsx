@@ -71,8 +71,9 @@ export function CMSContentRefresher() {
             }
          })
 
-         // Dispatch event to notify components about content update
          window.dispatchEvent(new CustomEvent('cmsContentUpdated'))
+         window.dispatchEvent(new CustomEvent('contentUpdated'))
+         window.dispatchEvent(new CustomEvent('imageUpdated'))
 
          // console.log(`✅ CMS content for "${page}" saved into localStorage.`)
       } catch (error) {

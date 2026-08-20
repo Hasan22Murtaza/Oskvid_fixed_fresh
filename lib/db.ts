@@ -154,6 +154,12 @@ function getDb(): SqliteDatabase | null {
 }
 
 export function getContentData(): Record<string, any> {
+  // Vercel serverless cannot reliably persist SQLite, so the bundled JSON
+  // (synced from local CMS) is the production source of truth.
+  if (process.env.VERCEL) {
+    return readJsonStore()
+  }
+
   try {
     const database = getDb()
     if (!database) return readJsonStore()

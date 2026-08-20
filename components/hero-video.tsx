@@ -3,14 +3,16 @@ import { useEffect, useState, useRef } from 'react'
 
 interface HeroVideoProps {
    contentKey?: string
+   fallback?: string
    className?: string
 }
 
 export default function HeroVideo({
    contentKey,
+   fallback = '/images/videographer-sunset.jpeg',
    className = '',
 }: HeroVideoProps) {
-   const [src, setSrc] = useState<string | null>(null)
+   const [src, setSrc] = useState<string>(fallback)
    const [isReady, setIsReady] = useState(false)
    const currentUrlRef = useRef<string | null>(null)
 
@@ -24,14 +26,11 @@ export default function HeroVideo({
    }
 
    useEffect(() => {
-      if (!contentKey) return
-
-      const updateMedia = () => {
-         const saved = localStorage.getItem(`content_${contentKey}`)
-         if (!saved) return
-         const normalized = saved.startsWith('/') || saved.startsWith('data:')
-            ? saved
-            : `/${saved}`
+      const applySrc = (next: string) => {
+         const normalized =
+            next.startsWith('/') || next.startsWith('data:') || next.startsWith('http')
+               ? next
+               : `/${next}`
          if (normalized !== currentUrlRef.current) {
             currentUrlRef.current = normalized
             setIsReady(false)
@@ -39,16 +38,25 @@ export default function HeroVideo({
          }
       }
 
+      const updateMedia = () => {
+         const saved = contentKey
+            ? localStorage.getItem(`content_${contentKey}`)
+            : null
+         applySrc(saved || fallback)
+      }
+
       updateMedia()
       window.addEventListener('storage', updateMedia)
       window.addEventListener('contentUpdated', updateMedia)
+      window.addEventListener('cmsContentUpdated', updateMedia)
       const interval = setInterval(updateMedia, 1000)
       return () => {
          window.removeEventListener('storage', updateMedia)
          window.removeEventListener('contentUpdated', updateMedia)
+         window.removeEventListener('cmsContentUpdated', updateMedia)
          clearInterval(interval)
       }
-   }, [contentKey])
+   }, [contentKey, fallback])
 
    if (!src) return null
 
@@ -65,6 +73,13 @@ export default function HeroVideo({
                preload="auto"
                src={src}
                onCanPlay={() => setIsReady(true)}
+               onError={() => {
+                  if (src !== fallback) {
+                     currentUrlRef.current = fallback
+                     setIsReady(false)
+                     setSrc(fallback)
+                  }
+               }}
             />
          ) : (
             <img
@@ -73,6 +88,13 @@ export default function HeroVideo({
                alt="Hero background"
                className={`absolute inset-0 w-full h-full object-cover pointer-events-none transition-opacity duration-1000 ${isReady ? 'opacity-100' : 'opacity-0'}`}
                onLoad={() => setIsReady(true)}
+               onError={() => {
+                  if (src !== fallback) {
+                     currentUrlRef.current = fallback
+                     setIsReady(false)
+                     setSrc(fallback)
+                  }
+               }}
             />
          )}
          <div

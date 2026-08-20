@@ -43,23 +43,31 @@ export function DynamicContent({
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
-    const saved = readStorage(contentKey)
-    setContent(saved || fallback)
+    const apply = () => {
+      const saved = readStorage(contentKey)
+      setContent(saved || fallback)
+    }
+
+    apply()
     setMounted(true)
 
     const handleContentUpdate = (event: CustomEvent) => {
-      if (event.detail.key === contentKey) setContent(event.detail.value)
+      if (event.detail?.key && event.detail.key !== contentKey) return
+      if (event.detail?.key === contentKey && event.detail.value != null) {
+        setContent(String(event.detail.value))
+        return
+      }
+      apply()
     }
-    const handleStorageChange = () => {
-      const updated = readStorage(contentKey)
-      if (updated) setContent(updated)
-    }
+    const handleStorageChange = () => apply()
 
     window.addEventListener('contentUpdated' as any, handleContentUpdate)
+    window.addEventListener('cmsContentUpdated' as any, handleContentUpdate)
     window.addEventListener('storage', handleStorageChange)
 
     return () => {
       window.removeEventListener('contentUpdated' as any, handleContentUpdate)
+      window.removeEventListener('cmsContentUpdated' as any, handleContentUpdate)
       window.removeEventListener('storage', handleStorageChange)
     }
   }, [contentKey, fallback])
@@ -87,34 +95,45 @@ export function DynamicImage({
   const [ready, setReady] = useState(false)
 
   useEffect(() => {
-    const saved = readStorage(contentKey)
-    const src = saved || fallback
+    const preload = (src: string) => {
+      const img = new window.Image()
+      img.src = src
+      img.onload = () => {
+        setImageSrc(src)
+        setReady(true)
+      }
+      img.onerror = () => {
+        setImageSrc(fallback)
+        setReady(true)
+      }
+    }
 
-    // Preload the image before swapping so there's no dark flash
-    const img = new window.Image()
-    img.src = src
-    img.onload = () => {
-      setImageSrc(src)
-      setReady(true)
+    const apply = () => {
+      const saved = readStorage(contentKey)
+      preload(saved || fallback)
     }
-    img.onerror = () => {
-      setImageSrc(fallback)
-      setReady(true)
-    }
+
+    apply()
 
     const handleImageUpdate = (event: CustomEvent) => {
-      if (event.detail.key === contentKey) setImageSrc(event.detail.value)
+      if (event.detail?.key && event.detail.key !== contentKey) return
+      if (event.detail?.key === contentKey && event.detail.value) {
+        preload(String(event.detail.value))
+        return
+      }
+      apply()
     }
-    const handleStorageChange = () => {
-      const updated = readStorage(contentKey)
-      if (updated) setImageSrc(updated)
-    }
+    const handleStorageChange = () => apply()
 
     window.addEventListener('imageUpdated' as any, handleImageUpdate)
+    window.addEventListener('contentUpdated' as any, handleImageUpdate)
+    window.addEventListener('cmsContentUpdated' as any, handleImageUpdate)
     window.addEventListener('storage', handleStorageChange)
 
     return () => {
       window.removeEventListener('imageUpdated' as any, handleImageUpdate)
+      window.removeEventListener('contentUpdated' as any, handleImageUpdate)
+      window.removeEventListener('cmsContentUpdated' as any, handleImageUpdate)
       window.removeEventListener('storage', handleStorageChange)
     }
   }, [contentKey, fallback])
